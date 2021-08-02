@@ -4,7 +4,7 @@
     <div class="semafor red" v-bind:class="{ active: redActive }"></div>
     <div class="semafor green" v-bind:class="{ active: greenActive }"></div>
     <button
-      v-on:click="onButtonClick()"
+      @mousedown="onButtonClick()"
       :disabled="!(round > 0 && round < 6) || !greenActive"
     >
       GO!
@@ -21,7 +21,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Results from "../types/semafor";
-import { DateTime } from "luxon";
 
 export default defineComponent({
   name: "Semafor",
@@ -36,12 +35,13 @@ export default defineComponent({
       maxTime: 8000,
       startTime: 0,
       round: 0,
-      results: [{} as Results],
+      results: [] as Results[],
     };
   },
   methods: {
     onStartGame() {
       this.round = 0;
+      this.results = [];
       this.startTimer();
     },
     startTimer() {
@@ -54,11 +54,11 @@ export default defineComponent({
       setTimeout(() => {
         this.redActive = !this.redActive;
         this.greenActive = !this.greenActive;
-        this.startTime = Number(DateTime.now().toFormat("x"));
+        this.startTime = Date.now();
       }, timeout);
     },
     onButtonClick() {
-      const clickTime = Number(DateTime.now().toFormat("x"));
+      const clickTime = Date.now();
       const result = clickTime - this.startTime;
       this.results.push({ value: result, round: this.round });
       this.greenActive = !this.greenActive;
