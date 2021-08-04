@@ -10,8 +10,9 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "crypto-js": "^4.1.1",
+    "firebase": "^8.8.1",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0-0"
+    "vue-router": "^4.0.10"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.0.2",
