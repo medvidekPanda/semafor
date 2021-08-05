@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button v-on:click="onStartGame()">Start Game</button>
+    <button v-on:click="onStartGame()">Začít hru</button>
     <div class="semafor red" v-bind:class="{ active: redActive }"></div>
     <div class="semafor green" v-bind:class="{ active: greenActive }"></div>
     <button
@@ -10,9 +10,10 @@
       GO!
     </button>
     <ul>
+      <li v-if="rounded">Průměrný čas: {{ rounded }}ms</li>
       <li v-for="result in results" :key="result.value">
-        <p v-if="result.round">Round: {{ result.round }}</p>
-        <p v-if="result.value">Time: {{ result.value }} ms</p>
+        <p v-if="result.round">Kolo: {{ result.round }}</p>
+        <p v-if="result.value">Čas: {{ result.value }} ms</p>
       </li>
     </ul>
   </div>
@@ -20,15 +21,14 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Results from "../../types/semafor";
-import Base64 from "crypto-js/enc-base64";
-import CryptoJS from "crypto-js";
+
+import SemaforRound from "../../types/results-round";
+
+let rounded: string | undefined = undefined;
+let results: SemaforRound[] = [];
 
 export default defineComponent({
   name: "SemaforComp",
-  props: {
-    msg: String,
-  },
   data() {
     return {
       redActive: false,
@@ -37,13 +37,8 @@ export default defineComponent({
       maxTime: 8000,
       startTime: 0,
       round: 0,
-      results: [] as Results[],
-      name: null,
-      surName: null,
-      age: null,
-      email: "",
-      hashedData: "",
-      errors: [] as string[],
+      rounded,
+      results,
     };
   },
   methods: {
@@ -68,16 +63,21 @@ export default defineComponent({
     onButtonClick() {
       const clickTime = Date.now();
       const result = clickTime - this.startTime;
+
       this.results.push({ value: result, round: this.round });
+      this.rounded = this.calculateRounded().toFixed(2);
       this.greenActive = !this.greenActive;
+
+      const payload = {
+        results: { rounds: this.results, roundedValue: this.rounded },
+      };
+      this.$store.dispatch("saveSemaforResults", payload);
 
       if (this.round < 5) {
         this.startTimer();
-      } else {
-        this.calculateFinalRes();
       }
     },
-    calculateFinalRes() {
+    calculateRounded() {
       let number = 0;
       for (const result of this.results) {
         if (result.value) {
@@ -85,26 +85,7 @@ export default defineComponent({
         }
       }
 
-      this.results.push({ value: number / 5, round: "Rounded" });
-    },
-    onSubmitForm() {
-      this.errors = [];
-
-      if (this.name && this.surName && this.age && this.email) {
-        this.hashData();
-        return;
-      }
-
-      this.errors.push("Něco ve formuláři chybí");
-    },
-    hashData() {
-      const hash = CryptoJS.HmacSHA512(
-        `${this.name}+${this.surName}+${this.age}+${this.email}`,
-        this.email
-      );
-
-      this.hashedData = String(hash);
-      console.log("hash", Base64.stringify(hash));
+      return number / this.results.length;
     },
   },
 });

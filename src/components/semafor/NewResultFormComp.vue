@@ -1,33 +1,43 @@
 <template>
   <div>
     <form id="dataForm">
-      <p v-if="errors.length">
+      <div v-if="errors.length">
         <ul>
           <li v-for="error in errors" :key="error">{{ error }}</li>
         </ul>
-      </p>
-      <label for="name">Jméno</label>
-      <input id="name" v-model="name" type="text" name="name" />
-      <label for="name">Příjmení</label>
-      <input id="surName" v-model="surName" type="text" name="surName" />
-      <label for="name">Věk</label>
-      <input id="age" v-model="age" type="text" name="age" />
-      <label for="name">E-mail</label>
-      <input id="email" v-model="email" type="text" name="email" />
+      </div>
+      <label for="name">Křestní jméno</label>
+      <input id="name" v-model="formData.name" type="text" name="name" />
+      <label for="age">Věk</label>
+      <input id="age" v-model="formData.age" type="number" name="age" />
+      <section>
+        <input type="radio" v-model="formData.sex" value="male" />Muž
+        <input type="radio" v-model="formData.sex" value="female" />Žena
+        <input type="radio" v-model="formData.sex" value="other" />Ostatní
+      </section>
+      <label for="email">E-mail</label>
+      <input id="email" v-model="formData.email" type="email" name="email" />
       <button type="button" value="Submit" @click="onSubmitForm()">
         Odeslat
       </button>
-      <h3 v-if="hashedData">Zakódovaná data: {{ hashedData }}</h3>
     </form>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Base64 from "crypto-js/enc-base64";
+import MD5 from "crypto-js/md5";
 import CryptoJS from "crypto-js";
 
-import firebase from "firebase";
+import ResultsForm from "../../types/results-form";
+import PostForm from "../..//types/post-form";
+
+let formData: ResultsForm = {
+  age: "",
+  email: "",
+  name: "",
+  sex: "",
+};
 
 export default defineComponent({
   name: "NewResultFormComp",
@@ -36,51 +46,50 @@ export default defineComponent({
   },
   data() {
     return {
-      name: null,
-      surName: null,
-      age: null,
-      email: "",
-      hashedData: "",
+      formData,
       errors: [] as string[],
     };
   },
   methods: {
     async onSubmitForm() {
-      const db = firebase
-        .firestore()
-        .collection("results")
-        .doc("EtZ2MePgdkZXuGpoT0l9")
-        .get();
-      await db
-        .then((result) => {
-          console.log("results", result.data());
-        })
-        .catch((error) => {
-          console.log("error", error);
+      this.errors = [];
+
+      if (Number(this.formData.age) > 0 && this.formData.email) {
+        const results: PostForm = {
+          age: this.formData.age,
+          sex: this.formData.sex,
+        };
+
+        await this.$store.dispatch("saveSemaforResults", {
+          id: this.hashData(),
+          results,
         });
 
-      // this.errors = [];
+        await this.$store
+          .dispatch("postResults")
+          .then(() => {
+            alert("Záznam uložen v pořádku");
+          })
+          .catch((error) => {
+            alert(error);
+          });
 
-      // if (this.name && this.surName && this.age && this.email) {
-      //   this.hashData();
-      //   return;
-      // }
+        return;
+      }
 
-      // this.errors.push("Něco ve formuláři chybí");
+      this.errors.push("Něco ve formuláři chybí");
     },
     hashData() {
       const hash = CryptoJS.HmacSHA512(
-        `${this.name}+${this.surName}+${this.age}+${this.email}`,
-        this.email
+        `${
+          this.formData.age
+        }+${this.formData.name.toLowerCase()}+${this.formData.email.toLowerCase()}`,
+        this.formData.email.toLowerCase()
       );
-
-      this.hashedData = String(hash);
-      console.log("hash", Base64.stringify(hash));
+      return MD5(hash).toString();
     },
   },
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
