@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Semafor from "../views/Semafor.vue";
+import Semafor from "../views/SemaforView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Login.vue"),
+      import(/* webpackChunkName: "about" */ "../views/LoginView.vue"),
   },
   {
     path: "/admin",
@@ -23,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/admin/Admin.vue"),
+      import(/* webpackChunkName: "about" */ "../views/admin/AdminView.vue"),
   },
 ];
 

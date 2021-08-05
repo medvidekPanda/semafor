@@ -10,7 +10,7 @@
 import { defineComponent, ref } from "vue";
 import firebase from "firebase/app";
 import "firebase/auth";
-import router from "../router/";
+import router from "../../router";
 
 const email = ref("");
 const password = ref("");
