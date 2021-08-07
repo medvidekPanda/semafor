@@ -1,14 +1,17 @@
 <template>
   <div>
-    <button v-on:click="onStartGame()">Začít hru</button>
+    <el-button
+      v-on:click="onStartGame()"
+      :disabled="isStarted"
+      >Začít hru</el-button
+    >
     <div class="semafor red" v-bind:class="{ active: redActive }"></div>
     <div class="semafor green" v-bind:class="{ active: greenActive }"></div>
-    <button
+    <el-button
       @mousedown="onButtonClick()"
       :disabled="!(round > 0 && round < 6) || !greenActive"
+      >Klikni když je semafor zelený</el-button
     >
-      GO!
-    </button>
     <div v-if="rounded">Průměrný čas: {{ rounded }}ms</div>
     <ul>
       <li v-for="result in results" :key="result.value">
@@ -21,7 +24,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-
 import SemaforRound from "../../types/results-round";
 
 let rounded: string | undefined = undefined;
@@ -39,10 +41,12 @@ export default defineComponent({
       round: 0,
       rounded,
       results,
+      isStarted: false,
     };
   },
   methods: {
     onStartGame() {
+      this.isStarted = true;
       this.round = 0;
       this.results = [];
       this.startTimer();
@@ -75,6 +79,8 @@ export default defineComponent({
 
       if (this.round < 5) {
         this.startTimer();
+      } else {
+        this.isStarted = false;
       }
     },
     calculateRounded() {

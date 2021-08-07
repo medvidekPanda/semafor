@@ -2,8 +2,10 @@ import { createApp } from "vue";
 import { store, key } from "./store/store";
 
 import App from "./App.vue";
-import router from "./router";
 import firebase from "firebase";
+import router from "./router";
+import ElementPlus from 'element-plus';
+import 'element-plus/lib/theme-chalk/index.css';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBioJiU3hh11shAXTq178UMICFru6VsifI",
@@ -16,4 +18,5 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-createApp(App).use(router).use(store, key).mount("#app");
+createApp(App).use(router).use(store, key).use(ElementPlus).mount("#app");
+
