@@ -19,3 +19,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped lang="scss">
+.semafor {
+  max-width: 600px;
+}
+</style>

@@ -19,4 +19,3 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 createApp(App).use(router).use(store, key).use(ElementPlus).mount("#app");
-

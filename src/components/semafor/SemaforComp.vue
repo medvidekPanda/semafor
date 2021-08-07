@@ -1,15 +1,26 @@
 <template>
-  <div>
-    <el-button
-      v-on:click="onStartGame()"
-      :disabled="isStarted"
+  <el-main style="display: flex; flex-direction: column; justify-content: center;">
+    <el-button v-on:click="onStartGame()" type="primary" :disabled="isStarted"
       >Začít hru</el-button
     >
-    <div class="semafor red" v-bind:class="{ active: redActive }"></div>
-    <div class="semafor green" v-bind:class="{ active: greenActive }"></div>
+    <el-row :gutter="16" :justify="center" style="margin: 16px">
+      <el-col :span="12" :justify="center" class="center">
+        <div
+          class="grid-content bg-purple semafor red"
+          v-bind:class="{ active: redActive }"
+        ></div>
+      </el-col>
+      <el-col :span="12" class="center">
+        <div
+          class="grid-content bg-purple semafor green"
+          v-bind:class="{ active: greenActive }"
+        ></div
+      ></el-col>
+    </el-row>
     <el-button
       @mousedown="onButtonClick()"
       :disabled="!(round > 0 && round < 6) || !greenActive"
+      type="danger"
       >Klikni když je semafor zelený</el-button
     >
     <div v-if="rounded">Průměrný čas: {{ rounded }}ms</div>
@@ -19,7 +30,7 @@
         <p v-if="result.value">Čas: {{ result.value }} ms</p>
       </li>
     </ul>
-  </div>
+  </el-main>
 </template>
 
 <script lang="ts">

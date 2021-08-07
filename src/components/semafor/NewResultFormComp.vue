@@ -1,35 +1,31 @@
 <template>
-  <div>
-    <form id="dataForm">
-      <div>
-        <label for="name">Křestní jméno</label>
-        <input id="name" v-model="formData.name" type="text" name="name" />
-        <p v-if="errors[1]">{{ errors[1] }}</p>
-      </div>
-      <div>
-        <label for="age">Věk</label>
-        <input id="age" v-model="formData.age" type="number" name="age" />
-        <p v-if="errors[0]">{{ errors[0] }}</p>
-      </div>
-      <div>
-        <label for="sex">Pohlaví</label>
-        <section id="sex">
-          <input type="radio" v-model="formData.sex" value="male" />Muž
-          <input type="radio" v-model="formData.sex" value="female" />Žena
-          <input type="radio" v-model="formData.sex" value="other" />Ostatní
-        </section>
-        <p v-if="errors[2]">{{ errors[2] }}</p>
-      </div>
-      <div>
-        <label for="email">E-mail</label>
-        <input id="email" v-model="formData.email" type="email" name="email" />
-        <p v-if="errors[3]">{{ errors[3] }}</p>
-      </div>
-      <button type="button" value="Submit" @click="onSubmitForm()">
-        Odeslat
-      </button>
-    </form>
-  </div>
+  <el-form ref="form" :model="form" label-width="120px">
+    <el-form-item label="Křestní jméno">
+      <el-input v-model="formData.name"></el-input>
+      <p v-if="errors[1]">{{ errors[1] }}</p>
+    </el-form-item>
+    <el-form-item label="Věk">
+      <el-input-number
+        v-model="formData.age"
+        :min="6"
+        :max="99"
+      ></el-input-number>
+      <p v-if="errors[0]">{{ errors[0] }}</p>
+    </el-form-item>
+    <el-form-item label="Pohlaví">
+      <el-radio v-model="formData.sex" label="man">Muž</el-radio>
+      <el-radio v-model="formData.sex" label="woman">Žena</el-radio>
+      <el-radio v-model="formData.sex" label="other">Ostatní</el-radio>
+      <p v-if="errors[2]">{{ errors[2] }}</p>
+    </el-form-item>
+    <el-form-item label="E-mail">
+      <el-input v-model="formData.email" type="email"></el-input>
+      <p v-if="errors[3]">{{ errors[3] }}</p>
+    </el-form-item>
+    <el-button type="primary" size="medium" @click="onSubmitForm()"
+      >Odeslat výsledky</el-button
+    >
+  </el-form>
 </template>
 
 <script lang="ts">
@@ -118,4 +114,13 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.el-form-item {
+  flex-direction: column;
+}
+
+.el-form-item__label {
+  text-align: left;
+  line-height: 24px;
+}
+</style>
