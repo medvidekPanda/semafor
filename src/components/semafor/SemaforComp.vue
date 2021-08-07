@@ -9,8 +9,8 @@
     >
       GO!
     </button>
+    <div v-if="rounded">Průměrný čas: {{ rounded }}ms</div>
     <ul>
-      <li v-if="rounded">Průměrný čas: {{ rounded }}ms</li>
       <li v-for="result in results" :key="result.value">
         <p v-if="result.round">Kolo: {{ result.round }}</p>
         <p v-if="result.value">Čas: {{ result.value }} ms</p>

@@ -5,10 +5,10 @@ import "firebase/firestore";
 import ResultPost from "../types/results-post.model";
 
 export const actions = {
-  saveSemaforResults(
+  async saveSemaforResults(
     { commit }: ActionContext<ResultPost, ResultPost>,
     payload: Partial<ResultPost>
-  ): void {
+  ): Promise<void> {
     commit("saveSemaforResults", payload);
   },
   async postResults({ state }: ActionContext<ResultPost, ResultPost>): Promise<string | void> {
