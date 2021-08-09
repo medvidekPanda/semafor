@@ -1,23 +1,15 @@
-// @import 'element-plus/packages/theme-chalk/src/var.scss';
-// @import 'element-plus/packages/theme-chalk/src/common/transition.scss';
-// @import 'element-plus/packages/theme-chalk/src/button.scss';
-// @import 'element-plus/packages/theme-chalk/src/input.scss';
-// @import 'element-plus/packages/theme-chalk/src/input-number.scss';
-// @import 'element-plus/packages/theme-chalk/src/form.scss';
-// @import 'element-plus/packages/theme-chalk/src/form-item.scss';
-// @import 'element-plus/packages/theme-chalk/src/radio.scss';
-// @import 'element-plus/packages/theme-chalk/src/radio-button.scss';
-// @import 'element-plus/packages/theme-chalk/src/radio-group.scss';
-
-// $--font-path: '../node_modules/element-plus/packages/theme-chalk/src/fonts';
-
-// @import 'element-plus/packages/theme-chalk/src/base.scss';
-
-// @import 'element-plus/packages/theme-chalk/src/index.scss';
-
 .el-col {
   &.center {
     display: flex;
     justify-content: center;
   }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.no-margin {
+  margin: 0;
 }

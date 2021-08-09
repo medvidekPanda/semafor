@@ -1,5 +1,5 @@
 import { InjectionKey } from "vue";
-import { createStore, Store } from "vuex";
+import { createStore, useStore as baseUseStore, Store } from "vuex";
 
 import ResultPost from "../types/results-post.model";
 import { actions } from "./actions";
@@ -13,3 +13,8 @@ export const store = createStore<ResultPost>({
   mutations: mutations,
   actions: actions,
 });
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function useStore () {
+  return baseUseStore(key)
+}

@@ -1,10 +1,10 @@
 <template>
-  <el-main style="display: flex; flex-direction: column; justify-content: center;">
-    <el-button v-on:click="onStartGame()" type="primary" :disabled="isStarted"
+  <el-space wrap :size="size" direction="vertical" :fill="fill">
+    <el-button v-on:click="onStartGame()" type="primary" plain :disabled="isStarted"
       >Začít hru</el-button
     >
-    <el-row :gutter="16" :justify="center" style="margin: 16px">
-      <el-col :span="12" :justify="center" class="center">
+    <el-row :gutter="16" justify="center">
+      <el-col :span="12" justify="center" class="center">
         <div
           class="grid-content bg-purple semafor red"
           v-bind:class="{ active: redActive }"
@@ -21,16 +21,10 @@
       @mousedown="onButtonClick()"
       :disabled="!(round > 0 && round < 6) || !greenActive"
       type="danger"
+      style="width: 100%;"
       >Klikni když je semafor zelený</el-button
     >
-    <div v-if="rounded">Průměrný čas: {{ rounded }}ms</div>
-    <ul>
-      <li v-for="result in results" :key="result.value">
-        <p v-if="result.round">Kolo: {{ result.round }}</p>
-        <p v-if="result.value">Čas: {{ result.value }} ms</p>
-      </li>
-    </ul>
-  </el-main>
+  </el-space>
 </template>
 
 <script lang="ts">
@@ -39,6 +33,8 @@ import SemaforRound from "../../types/results-round";
 
 let rounded: string | undefined = undefined;
 let results: SemaforRound[] = [];
+const fill = true;
+const size = 32;
 
 export default defineComponent({
   name: "SemaforComp",
@@ -53,6 +49,8 @@ export default defineComponent({
       rounded,
       results,
       isStarted: false,
+      fill,
+      size
     };
   },
   methods: {
@@ -108,21 +106,22 @@ export default defineComponent({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .semafor {
   width: 100px;
   height: 100px;
-  border: 2px solid black;
-  border-radius: 50%;
+  border: var(--el-border-base);
+  box-shadow: var(--el-box-shadow-base);
+  border-radius: var(--el-border-radius-circle);
+  background-color: var(--el-color-info-light);
 
   &.active {
     &.red {
-      background-color: red;
+      background-color: var(--el-color-danger);
     }
 
     &.green {
-      background-color: green;
+      background-color: var(--el-color-success);
     }
   }
 }
