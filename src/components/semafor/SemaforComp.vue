@@ -1,8 +1,18 @@
 <template>
   <el-space wrap :size="size" direction="vertical" :fill="fill">
-    <el-button v-on:click="onStartGame()" type="primary" plain :disabled="isStarted"
-      >Začít hru</el-button
-    >
+    <el-space wrap :size="size">
+      <el-button
+        v-on:click="onStartGame()"
+        type="primary"
+        plain
+        :disabled="isStarted"
+        >Začít hru</el-button
+      >
+      <el-button type="text" @click="howToPlayDialog = true"
+        >Jak hrát</el-button
+      >
+      <el-button type="text" @click="gdprDialog = true">GDPR</el-button>
+    </el-space>
     <el-row :gutter="16" justify="center">
       <el-col :span="12" justify="center" class="center">
         <div
@@ -21,10 +31,30 @@
       @mousedown="onButtonClick()"
       :disabled="!(round > 0 && round < 6) || !greenActive"
       type="danger"
-      style="width: 100%;"
+      style="width: 100%"
       >Klikni když je semafor zelený</el-button
     >
   </el-space>
+
+  <el-dialog title="Jak hrát" v-model="howToPlayDialog" fullscreen="true">
+    Hru spustíte kliknutím na tlačítko “Začít hru”. Až semafor přeskočí z
+    červené na zelenou, co nejrychleji klikněte na tlačítko “Klikni, když je
+    semafor zelený”, nebo zmáčkněte mezerník. Test proběhne celkem pětkrát v
+    různých časových intervalech. Výsledný reakční čas je průměr těchto pěti
+    pokusů. Průměrný čas vyplňte společně s křestním jménem, demografickými
+    údaji a e-mailem do formuláře níže a klikněte na tlačítko odeslat. TIP: Hru
+    si nejprve vyzkoušejte na nečisto a až poté proveďte ostrý pokus. Test si
+    můžete zopakovat vícekrát. Odesílejte však pouze jednu odpověď na osobu.
+  </el-dialog>
+
+  <el-dialog title="Ochranna osobních údajů" v-model="gdprDialog" fullscreen="true">
+    Cílem této hry je posoudit reakční čas české populace. Vyplněním a odeslání
+    formuláře dáváte souhlas se zpracováním demografických údajů (věk a pohlaví)
+    k výzkumným účelům. Formulář nesbírá osobní údaje. Vyplnění křestního jména
+    a e-mailu slouží pouze pro hashovací funkci (více zde) a vytvoření
+    identifikačního kódu v databázi. Účelem vytvoření tohoto kódu je zabránit
+    duplikaci odeslaných odpovědí. Celá hra je tak anonymní.
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -50,7 +80,9 @@ export default defineComponent({
       results,
       isStarted: false,
       fill,
-      size
+      size,
+      howToPlayDialog: false,
+      gdprDialog: false,
     };
   },
   methods: {
