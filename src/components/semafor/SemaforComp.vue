@@ -1,17 +1,8 @@
 <template>
   <el-space wrap :size="size" direction="vertical" :fill="fill">
-    <el-space wrap :size="size">
-      <el-button
-        v-on:click="onStartGame()"
-        type="primary"
-        plain
-        :disabled="isStarted"
-        >Začít hru</el-button
-      >
-      <el-button type="text" @click="howToPlayDialog = true"
-        >Jak hrát</el-button
-      >
-      <el-button type="text" @click="gdprDialog = true">GDPR</el-button>
+    <el-space :size="size" class="buttons">
+      <el-button type="primary" @click="howToPlayDialog = true" plain>Jak hrát</el-button>
+      <el-button v-on:click="onStartGame()" type="success" :disabled="isStarted">Začít hru</el-button>
     </el-space>
     <el-row :gutter="16" justify="center">
       <el-col :span="12" justify="center" class="center">
@@ -46,15 +37,6 @@
     si nejprve vyzkoušejte na nečisto a až poté proveďte ostrý pokus. Test si
     můžete zopakovat vícekrát. Odesílejte však pouze jednu odpověď na osobu.
   </el-dialog>
-
-  <el-dialog title="Ochranna osobních údajů" v-model="gdprDialog" fullscreen="true">
-    Cílem této hry je posoudit reakční čas české populace. Vyplněním a odeslání
-    formuláře dáváte souhlas se zpracováním demografických údajů (věk a pohlaví)
-    k výzkumným účelům. Formulář nesbírá osobní údaje. Vyplnění křestního jména
-    a e-mailu slouží pouze pro hashovací funkci (více zde) a vytvoření
-    identifikačního kódu v databázi. Účelem vytvoření tohoto kódu je zabránit
-    duplikaci odeslaných odpovědí. Celá hra je tak anonymní.
-  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -82,7 +64,6 @@ export default defineComponent({
       fill,
       size,
       howToPlayDialog: false,
-      gdprDialog: false,
     };
   },
   methods: {
@@ -155,6 +136,17 @@ export default defineComponent({
     &.green {
       background-color: var(--el-color-success);
     }
+  }
+}
+
+::v-deep {
+  .el-space.buttons {
+    display: flex;
+    justify-content: center;
+  }
+
+  .el-space__item:last-child {
+    margin-right: 0 !important;
   }
 }
 </style>

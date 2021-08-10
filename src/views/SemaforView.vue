@@ -1,11 +1,19 @@
 <template>
-  <div class="semafor">
-    <el-main style="display: flex; flex-direction: column; justify-content: center; gap: 24px;">
-      <SemaforComp />
-      <ResultsListComp />
+  <el-main>
+    <SemaforComp />
+    <ResultsListComp />
+    <el-button type="primary" @click="submitFormDialog = true"
+      >Odeslat výsledky</el-button
+    >
+
+    <el-dialog
+      title="Odeslat výsledky"
+      v-model="submitFormDialog"
+      fullscreen="true"
+    >
       <NewResultFormComp />
-    </el-main>
-  </div>
+    </el-dialog>
+  </el-main>
 </template>
 
 <script lang="ts">
@@ -22,11 +30,29 @@ export default defineComponent({
     SemaforComp,
     ResultsListComp,
   },
+  data() {
+    return {
+      submitFormDialog: false,
+    };
+  },
 });
 </script>
 
 <style scoped lang="scss">
-.semafor {
-  max-width: 600px;
+.el-main {
+  display: flex;
+  max-width: 768px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 24px;
+}
+
+@media (min-width: 769px) and (-webkit-min-device-pixel-ratio: 2),
+  (min-width: 769px) and (min-resolution: 192dpi) {
+  .el-main {
+    align-items: center;
+    justify-content: center;
+  }
 }
 </style>
