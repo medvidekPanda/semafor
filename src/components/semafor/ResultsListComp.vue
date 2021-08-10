@@ -1,10 +1,7 @@
 <template>
-  <el-space wrap :size="size" direction="vertical" alignment="start">
+  <el-space v-if="getResultsStore" wrap :size="size" direction="vertical" alignment="start">
     <h3 class="no-margin">
-      Průměrný čas:
-      {{ getResultsStore?.roundedValue }}
-      <template v-if="getResultsStore && getResultsStore.roundedValue">ms</template>
-      <template v-else>žádný</template>
+      Průměrný čas: {{ getResultsStore?.roundedValue }}ms
     </h3>
     <ul v-if="getResultsStore" class="list">
       <el-space wrap :size="size" direction="vertical" alignment="start">
@@ -18,8 +15,8 @@
         </li>
       </el-space>
     </ul>
-    <h4 class="no-margin" v-else>Zatím žádné výsledky</h4>
   </el-space>
+  <h4 class="no-margin" v-else>Zatím žádné výsledky</h4>
 </template>
 
 <script lang="ts">
