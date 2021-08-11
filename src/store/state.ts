@@ -2,5 +2,7 @@ import ResultPost from "@/types/results-post.model";
 
 export const state: ResultPost = {
   id: undefined,
+  isFinished: false,
+  isMobile: undefined,
   results: undefined,
 };

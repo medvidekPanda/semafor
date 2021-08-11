@@ -21,12 +21,23 @@ export const actions = {
       .get()
       .then((result: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>): Promise<string | void> => {
         return new Promise((resolve, reject) => {
+          const data = result.data();
+
           if (!result.exists) {
             resolve(db.set(state.results || {}));
+          } else if (
+            result.exists && state.isMobile && !data?.mobile ||
+            result.exists && !state.isMobile && !data?.desktop
+            ) {
+            resolve(db.update(state.results || {}));
           } else {
             reject(`Záznam s hashem ${result.id} již existuje!`);
           }
         })
       });
+
   },
+  clearStore({ commit }: ActionContext<ResultPost, ResultPost>): void {
+    commit("clearStore");
+  }
 };

@@ -2,10 +2,12 @@
   <el-main>
     <SemaforComp />
     <ResultsListComp />
-    <el-button type="primary" @click="submitFormDialog = true"
+    <el-button
+      type="primary"
+      @click="submitFormDialog = true"
+      :disabled="!isFinished"
       >Odeslat výsledky</el-button
     >
-
     <el-dialog
       title="Odeslat výsledky"
       v-model="submitFormDialog"
@@ -22,6 +24,8 @@ import { defineComponent } from "vue";
 import NewResultFormComp from "@/components/semafor/NewResultFormComp.vue";
 import SemaforComp from "@/components/semafor/SemaforComp.vue";
 import ResultsListComp from "@/components/semafor/ResultsListComp.vue";
+import { Store } from "vuex";
+import ResultPost from "@/types/results-post.model";
 
 export default defineComponent({
   name: "Semafor",
@@ -29,6 +33,11 @@ export default defineComponent({
     NewResultFormComp,
     SemaforComp,
     ResultsListComp,
+  },
+  computed: {
+    isFinished(): Store<ResultPost> {
+      return this.$store.state.isFinished;
+    },
   },
   data() {
     return {

@@ -1,8 +1,8 @@
 <template>
   <el-space wrap :size="size" direction="vertical" :fill="fill">
     <el-space :size="size" class="buttons">
-      <el-button type="primary" @click="howToPlayDialog = true" plain>Jak hrát</el-button>
-      <el-button v-on:click="onStartGame()" type="success" :disabled="isStarted">Začít hru</el-button>
+      <el-button type="primary" @click="aboutTestDialog = true" plain>O testu</el-button>
+      <el-button v-on:click="onTestStart()" type="success" :disabled="isStarted">Spustit test</el-button>
     </el-space>
     <el-row :gutter="16" justify="center">
       <el-col :span="12" justify="center" class="center">
@@ -27,7 +27,7 @@
     >
   </el-space>
 
-  <el-dialog title="Jak hrát" v-model="howToPlayDialog" fullscreen="true">
+  <el-dialog title="Jak hrát" v-model="aboutTestDialog" fullscreen="true">
     Hru spustíte kliknutím na tlačítko “Začít hru”. Až semafor přeskočí z
     červené na zelenou, co nejrychleji klikněte na tlačítko “Klikni, když je
     semafor zelený”, nebo zmáčkněte mezerník. Test proběhne celkem pětkrát v
@@ -41,15 +41,23 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { Device } from "@capacitor/device";
+
 import SemaforRound from "../../types/results-round";
 
-let rounded: string | undefined = undefined;
-let results: SemaforRound[] = [];
 const fill = true;
 const size = 32;
+let rounded: string | undefined = undefined;
+let results: SemaforRound[] = [];
+let isMobile: boolean;
 
 export default defineComponent({
   name: "SemaforComp",
+  async mounted() {
+    const info = await Device.getInfo();
+    isMobile = info.operatingSystem === "ios" || info.operatingSystem === "android";
+    this.$store.dispatch("saveSemaforResults", { isMobile })
+  },
   data() {
     return {
       redActive: false,
@@ -63,14 +71,15 @@ export default defineComponent({
       isStarted: false,
       fill,
       size,
-      howToPlayDialog: false,
+      aboutTestDialog: false,
     };
   },
   methods: {
-    onStartGame() {
+    onTestStart() {
       this.isStarted = true;
       this.round = 0;
       this.results = [];
+      this.$store.dispatch("clearStore");
       this.startTimer();
     },
     startTimer() {
@@ -95,7 +104,12 @@ export default defineComponent({
       this.greenActive = !this.greenActive;
 
       const payload = {
-        results: { rounds: this.results, roundedValue: this.rounded },
+        results: {
+          [isMobile ? "mobile" : "desktop"]: {
+            rounds: this.results,
+            roundedValue: this.rounded,
+          },
+        },
       };
       this.$store.dispatch("saveSemaforResults", payload);
 
@@ -103,6 +117,7 @@ export default defineComponent({
         this.startTimer();
       } else {
         this.isStarted = false;
+        this.$store.dispatch("saveSemaforResults", { isFinished: true });
       }
     },
     calculateRounded() {

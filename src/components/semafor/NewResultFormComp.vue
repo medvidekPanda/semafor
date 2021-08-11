@@ -52,18 +52,18 @@
 </template>
 
 <script lang="ts">
+import CryptoJS from "crypto-js";
 import { defineComponent } from "vue";
 import MD5 from "crypto-js/md5";
-import CryptoJS from "crypto-js";
 
 import ResultsForm from "../../types/results-form";
 import PostForm from "../../types/post-form";
 
 let formData: ResultsForm = {
-  age: "",
-  email: "",
-  name: "",
-  sex: "",
+  age: "6",
+  email: "email@test.local",
+  name: "Honza",
+  sex: "male",
 };
 
 export default defineComponent({
@@ -111,8 +111,6 @@ export default defineComponent({
         ? this.errors.slice(0, 3)
         : (this.errors[3] = "Email je povinný!");
 
-      console.log(this.errors);
-
       if (this.errors.length === 0) {
         this.submitData();
       }
@@ -145,6 +143,8 @@ export default defineComponent({
         .catch((error) => {
           alert(error);
         });
+
+      await this.$store.dispatch("clearStore");
 
       return;
     },

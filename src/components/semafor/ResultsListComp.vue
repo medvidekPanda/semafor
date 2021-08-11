@@ -21,12 +21,19 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { Device } from "@capacitor/device";
 import { Store } from "vuex";
 
 import ResultPost from "@/types/results-post.model";
 
+let isMobile: boolean;
+
 export default defineComponent({
   name: "ResultsListComp",
+  async mounted() {
+    const info = await Device.getInfo();
+    isMobile = info.operatingSystem === "ios" || info.operatingSystem === "android";
+  },
   data() {
     return {
       size: 16,
@@ -34,7 +41,8 @@ export default defineComponent({
   },
   computed: {
     getResultsStore(): Store<ResultPost> {
-      return this.$store.state.results;
+      const store = this.$store.state.results;
+      return store && store[isMobile ? 'mobile' : 'desktop'];
     },
   },
 });

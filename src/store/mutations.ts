@@ -5,5 +5,12 @@ export const mutations = {
     const results = { ...state.results, ...payload.results };
     state.id = payload.id;
     state.results = results;
+    state.isFinished = payload.isFinished || state.isFinished;
+    state.isMobile = payload.isMobile || state.isMobile;
   },
+  clearStore(state: ResultPost): void {
+    state.id = undefined;
+    state.results = undefined;
+    state.isFinished = false;
+  }
 };

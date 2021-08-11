@@ -3,5 +3,7 @@ import SemaforResult from "./results-semafor";
 
 export default interface ResultPost {
   id?: string;
-  results?: SemaforResult & PostForm & { isMobile?: boolean } & { inputDevice?: string };
+  isFinished: boolean;
+  isMobile?: boolean;
+  results?: SemaforResult & PostForm & { inputDevice?: string };
 }
