@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import { store, key } from "./store/store";
 
 import App from "./App.vue";
-import firebase from "firebase";
+import firebase from "firebase/app";
 import router from "./router";
 import ElementPlus from 'element-plus';
 import 'element-plus/lib/theme-chalk/index.css';

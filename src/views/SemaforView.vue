@@ -20,7 +20,7 @@
     <el-dialog
       title="Odeslat výsledky"
       v-model="submitFormDialog"
-      fullscreen="true"
+      :fullscreen="windowWidth < 960"
     >
       <NewResultFormComp />
     </el-dialog>
@@ -43,16 +43,13 @@ export default defineComponent({
     SemaforComp,
     ResultsListComp,
   },
-  mounted() {
-    this.onResize();
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize);
-    })
-  },
   computed: {
     isFinished(): Store<ResultPost> {
       return this.$store.state.isFinished;
     },
+    windowWidth(): Store<ResultPost> {
+      return this.$store.state.windowWidth
+    }
   },
   data() {
     return {
@@ -60,13 +57,19 @@ export default defineComponent({
       fill: true,
     };
   },
+  mounted() {
+    this.onResize();
+    this.$nextTick(() => {
+      window.addEventListener("resize", this.onResize);
+    });
+  },
   methods: {
     onResize() {
-      this.$store.dispatch('getWindowWidth', window.innerWidth);
-    }
+      this.$store.dispatch("getWindowWidth", window.innerWidth);
+    },
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener("resize", this.onResize);
   },
 });
 </script>

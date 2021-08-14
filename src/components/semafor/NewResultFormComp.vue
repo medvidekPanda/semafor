@@ -60,7 +60,7 @@ import ResultsForm from "../../types/results-form";
 import PostForm from "../../types/post-form";
 
 let formData: ResultsForm = {
-  age: "6",
+  age: 6,
   email: "email@test.local",
   name: "Honza",
   sex: "male",
@@ -126,7 +126,7 @@ export default defineComponent({
     },
     async submitData() {
       const results: PostForm = {
-        age: this.formData.age,
+        age: Number(this.formData.age),
         sex: this.formData.sex,
       };
 

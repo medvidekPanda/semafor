@@ -1,5 +1,5 @@
 export default interface ResultsForm {
-  age: string;
+  age: number;
   email: string;
   name: string;
   sex: string;

@@ -26,6 +26,7 @@
     </section>
     <el-button
       @mousedown="onButtonClick()"
+      @click.space="onSpaceSqueeze()"
       :disabled="!(round > 0 && round < 6) || !greenActive"
       type="danger"
       style="width: 100%"
@@ -33,7 +34,7 @@
     >
   </el-space>
 
-  <el-dialog title="Jak hrát" v-model="aboutTestDialog" fullscreen="true">
+  <el-dialog title="Jak hrát" v-model="aboutTestDialog" :fullscreen="windowWidth < 960">
     Hru spustíte kliknutím na tlačítko “Začít hru”. Až semafor přeskočí z
     červené na zelenou, co nejrychleji klikněte na tlačítko “Klikni, když je
     semafor zelený”, nebo zmáčkněte mezerník. Test proběhne celkem pětkrát v
@@ -66,6 +67,11 @@ export default defineComponent({
     isMobile =
       info.operatingSystem === "ios" || info.operatingSystem === "android";
     this.$store.dispatch("saveSemaforResults", { isMobile });
+    window.addEventListener("keydown", e => {
+      if (e.code === 'Space' && (this.round > 0 && this.round < 6 && this.greenActive)) {
+        this.onSaveResult();
+      }
+    });
   },
   computed: {
     windowWidth(): Store<ResultPost> {
@@ -76,8 +82,8 @@ export default defineComponent({
     return {
       redActive: false,
       greenActive: false,
-      minTime: 200,
-      maxTime: 800,
+      minTime: 2000,
+      maxTime: 8000,
       startTime: 0,
       round: 0,
       rounded,
@@ -110,6 +116,9 @@ export default defineComponent({
       }, timeout);
     },
     onButtonClick() {
+      this.onSaveResult();
+    },
+    onSaveResult() {
       const clickTime = Date.now();
       const result = clickTime - this.startTime;
 
