@@ -12,5 +12,8 @@ export const mutations = {
     state.id = undefined;
     state.results = undefined;
     state.isFinished = false;
+  },
+  getWindowWidth(state: Partial<ResultPost>, payload: number): void {
+    state.windowWidth = payload | 0;
   }
 };

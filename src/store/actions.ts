@@ -39,5 +39,8 @@ export const actions = {
   },
   clearStore({ commit }: ActionContext<ResultPost, ResultPost>): void {
     commit("clearStore");
+  },
+  getWindowWidth({ commit }: ActionContext<ResultPost, ResultPost>, payload: Partial<ResultPost>): void {
+    commit("getWindowWidth", payload);
   }
 };

@@ -1,23 +1,29 @@
 <template>
-  <el-space wrap :size="size" direction="vertical" :fill="fill">
+  <el-space
+    :size="size"
+    :direction="windowWidth >= 960 ? 'horizontal' : 'vertical'"
+    class="flex-50"
+    alignment="flex-start"
+    :fill="fill"
+  >
     <el-space :size="size" class="buttons">
-      <el-button type="primary" @click="aboutTestDialog = true" plain>O testu</el-button>
-      <el-button v-on:click="onTestStart()" type="success" :disabled="isStarted">Spustit test</el-button>
+      <el-button type="primary" @click="aboutTestDialog = true" plain
+        >O testu</el-button
+      >
+      <el-button v-on:click="onTestStart()" type="success" :disabled="isStarted"
+        >Spustit test</el-button
+      >
     </el-space>
-    <el-row :gutter="16" justify="center">
-      <el-col :span="12" justify="center" class="center">
-        <div
-          class="grid-content bg-purple semafor red"
-          v-bind:class="{ active: redActive }"
-        ></div>
-      </el-col>
-      <el-col :span="12" class="center">
-        <div
-          class="grid-content bg-purple semafor green"
-          v-bind:class="{ active: greenActive }"
-        ></div
-      ></el-col>
-    </el-row>
+    <section class="semafor-wrapper">
+      <div
+        class="bg-purple semafor red"
+        v-bind:class="{ active: redActive }"
+      ></div>
+      <div
+        class="bg-purple semafor green"
+        v-bind:class="{ active: greenActive }"
+      ></div>
+    </section>
     <el-button
       @mousedown="onButtonClick()"
       :disabled="!(round > 0 && round < 6) || !greenActive"
@@ -41,9 +47,11 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { Store } from "vuex";
 import { Device } from "@capacitor/device";
 
 import SemaforRound from "../../types/results-round";
+import ResultPost from "@/types/results-post.model";
 
 const fill = true;
 const size = 32;
@@ -55,15 +63,21 @@ export default defineComponent({
   name: "SemaforComp",
   async mounted() {
     const info = await Device.getInfo();
-    isMobile = info.operatingSystem === "ios" || info.operatingSystem === "android";
-    this.$store.dispatch("saveSemaforResults", { isMobile })
+    isMobile =
+      info.operatingSystem === "ios" || info.operatingSystem === "android";
+    this.$store.dispatch("saveSemaforResults", { isMobile });
+  },
+  computed: {
+    windowWidth(): Store<ResultPost> {
+      return this.$store.state.windowWidth;
+    },
   },
   data() {
     return {
       redActive: false,
       greenActive: false,
-      minTime: 2000,
-      maxTime: 8000,
+      minTime: 200,
+      maxTime: 800,
       startTime: 0,
       round: 0,
       rounded,
@@ -136,8 +150,6 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .semafor {
-  width: 100px;
-  height: 100px;
   border: var(--el-border-base);
   box-shadow: var(--el-box-shadow-base);
   border-radius: var(--el-border-radius-circle);
@@ -150,6 +162,35 @@ export default defineComponent({
 
     &.green {
       background-color: var(--el-color-success);
+    }
+  }
+
+  &-wrapper {
+    display: flex;
+    gap: 32px;
+  }
+}
+
+.semafor {
+  @media (max-width: 959.99px) and (-webkit-min-device-pixel-ratio: 2),
+    (max-width: 960px) and (min-resolution: 192dpi) {
+    width: 100px;
+    height: 100px;
+
+    &-wrapper {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  @media (min-width: 959.99px) and (-webkit-min-device-pixel-ratio: 2),
+    (min-width: 960px) and (min-resolution: 192dpi) {
+    width: 200px;
+    height: 200px;
+
+    &-wrapper {
+      flex-direction: column;
+      align-items: center;
     }
   }
 }

@@ -20,3 +20,19 @@ a {
 .no-margin {
   margin: 0;
 }
+
+.margin {
+  @for $i from 1 through 10 {
+    &-top-#{$i} {
+      margin-top: $i*8px;
+    }
+
+    &-bottom-#{$i} {
+      margin-bottom: $i*8px;
+    }
+  }
+}
+
+.flex-50 {
+  flex: 1 1 50%;
+}

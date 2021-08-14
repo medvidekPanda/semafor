@@ -6,4 +6,5 @@ export default interface ResultPost {
   isFinished: boolean;
   isMobile?: boolean;
   results?: SemaforResult & PostForm & { inputDevice?: string };
+  windowWidth: number;
 }

@@ -5,4 +5,5 @@ export const state: ResultPost = {
   isFinished: false,
   isMobile: undefined,
   results: undefined,
+  windowWidth: 0,
 };
