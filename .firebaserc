@@ -1,5 +1,5 @@
 {
   "projects": {
-    "develop": "semafor-23f77"
+    "default": "semafor-23f77"
   }
 }

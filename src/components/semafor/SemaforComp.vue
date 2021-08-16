@@ -34,7 +34,11 @@
     >
   </el-space>
 
-  <el-dialog title="Jak hrát" v-model="aboutTestDialog" :fullscreen="windowWidth < 960">
+  <el-dialog
+    title="Jak hrát"
+    v-model="aboutTestDialog"
+    :fullscreen="windowWidth < 960"
+  >
     Hru spustíte kliknutím na tlačítko “Začít hru”. Až semafor přeskočí z
     červené na zelenou, co nejrychleji klikněte na tlačítko “Klikni, když je
     semafor zelený”, nebo zmáčkněte mezerník. Test proběhne celkem pětkrát v
@@ -67,8 +71,13 @@ export default defineComponent({
     isMobile =
       info.operatingSystem === "ios" || info.operatingSystem === "android";
     this.$store.dispatch("saveSemaforResults", { isMobile });
-    window.addEventListener("keydown", e => {
-      if (e.code === 'Space' && (this.round > 0 && this.round < 6 && this.greenActive)) {
+    window.addEventListener("keydown", (e) => {
+      if (
+        e.code === "Space" &&
+        this.round > 0 &&
+        this.round < 6 &&
+        this.greenActive
+      ) {
         this.onSaveResult();
       }
     });
@@ -178,11 +187,8 @@ export default defineComponent({
     display: flex;
     gap: 32px;
   }
-}
 
-.semafor {
-  @media (max-width: 959.99px) and (-webkit-min-device-pixel-ratio: 2),
-    (max-width: 960px) and (min-resolution: 192dpi) {
+  @media (max-width: 959.99px) {
     width: 100px;
     height: 100px;
 
@@ -192,8 +198,7 @@ export default defineComponent({
     }
   }
 
-  @media (min-width: 959.99px) and (-webkit-min-device-pixel-ratio: 2),
-    (min-width: 960px) and (min-resolution: 192dpi) {
+  @media (min-width: 960px) {
     width: 200px;
     height: 200px;
 
@@ -204,14 +209,12 @@ export default defineComponent({
   }
 }
 
-::v-deep {
-  .el-space.buttons {
-    display: flex;
-    justify-content: center;
-  }
+:deep(.el-space.buttons) {
+  display: flex;
+  justify-content: center;
+}
 
-  .el-space__item:last-child {
-    margin-right: 0 !important;
-  }
+:deep(.el-space__item:last-child) {
+  margin-right: 0 !important;
 }
 </style>

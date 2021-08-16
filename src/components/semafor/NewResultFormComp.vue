@@ -153,22 +153,23 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-::v-deep {
-  .el-form-item {
-    flex-direction: column;
-  }
+:deep(.el-form-item) {
+  flex-direction: column;
+}
 
-  .el-form-item__label {
-    line-height: 24px;
-  }
+:deep(.el-form-item__label) {
+  line-height: 24px;
+}
 
-  .el-input-number {
-    min-width: 128px;
-  }
+:deep(.el-input-number) {
+  min-width: 128px;
+}
 
-  .el-cascader,
-  .el-input-number {
-    width: 100%;
-  }
+:deep(.el-cascader) {
+  width: 100%
+}
+
+:deep(.el-input-number) {
+  width: 100%
 }
 </style>

@@ -92,8 +92,7 @@ export default defineComponent({
   flex: 0 0 auto;
 }
 
-@media (max-width: 959.99px) and (-webkit-min-device-pixel-ratio: 2),
-  (max-width: 960px) and (min-resolution: 192dpi) {
+@media (max-width: 959.99px) {
   .el-main {
     max-width: 768px;
   }
@@ -112,8 +111,7 @@ export default defineComponent({
   }
 }
 
-@media (min-width: 959.99px) and (-webkit-min-device-pixel-ratio: 2),
-  (min-width: 960px) and (min-resolution: 192dpi) {
+@media (min-width: 960px) {
   .el-main {
     align-items: center;
     justify-content: center;

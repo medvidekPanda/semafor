@@ -7,6 +7,7 @@
       <el-link :underline="false">
         <router-link to="/admin">Administrace</router-link>
       </el-link>
+      <p>v0.9b</p>
     </el-space>
   </el-header>
   <router-view />
@@ -23,4 +24,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+</style>
+
+<style lang="scss">
+@import "../scss/styles";
 </style>
