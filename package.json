@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "serve:production": "vue-cli-service serve --mode production",
+    "serve:prod": "vue-cli-service serve --mode production",
     "build": "vue-cli-service build --mode development",
-    "build:production": "vue-cli-service build",
+    "build:prod": "vue-cli-service build",
+    "deploy:dev": "firebase deploy -P dev",
+    "deploy:prod": "firebase deploy -P prod",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
