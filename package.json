@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "serve:prod": "vue-cli-service serve --mode production",
     "build": "vue-cli-service build --mode development",
+    "build:protect": "vue-cli-service build --mode development && javascript-obfuscator ./dist/js/app.js --output ./dist/js/app.js --compact false --simplify false",
     "build:prod": "vue-cli-service build",
     "deploy:dev": "firebase deploy -P dev",
     "deploy:prod": "firebase deploy -P prod",

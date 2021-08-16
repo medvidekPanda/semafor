@@ -36,7 +36,12 @@
         <el-input v-model="formData.email" type="email"></el-input>
         <p v-if="errors[3]">{{ errors[3] }}</p>
       </el-form-item>
-      <el-button type="primary" plain size="medium" @click="onSubmitForm()"
+      <el-button
+        type="primary"
+        plain
+        size="medium"
+        @click="onSubmitForm()"
+        :disabled="!isButtonDisabled"
         >Odeslat výsledky</el-button
       >
     </el-form>
@@ -55,9 +60,14 @@
 import CryptoJS from "crypto-js";
 import { defineComponent } from "vue";
 import MD5 from "crypto-js/md5";
+import firebase from "firebase/app";
+import "firebase/auth";
 
 import ResultsForm from "../../types/results-form";
 import PostForm from "../../types/post-form";
+import { Store } from "vuex";
+import ResultPost from "@/types/results-post.model";
+import { Device } from "@capacitor/device";
 
 let formData: ResultsForm = {
   age: 6,
@@ -66,8 +76,16 @@ let formData: ResultsForm = {
   sex: "male",
 };
 
+let isMobile: boolean;
+
 export default defineComponent({
   name: "NewResultFormComp",
+  computed: {
+    isButtonDisabled(): Store<ResultPost> {
+      const store = this.$store.state.results;
+      return store && store[isMobile ? "mobile" : "desktop"]?.rounds?.length === 5;
+    },
+  },
   data() {
     return {
       formData,
@@ -88,6 +106,10 @@ export default defineComponent({
       ],
       size: 24,
     };
+  },
+  async mounted() {
+    const info = await Device.getInfo();
+    isMobile = info.operatingSystem === "ios" || info.operatingSystem === "android";
   },
   methods: {
     onSubmitForm() {
@@ -146,6 +168,7 @@ export default defineComponent({
 
       await this.$store.dispatch("clearStore");
 
+      firebase.auth().signOut();
       return;
     },
   },
@@ -166,10 +189,10 @@ export default defineComponent({
 }
 
 :deep(.el-cascader) {
-  width: 100%
+  width: 100%;
 }
 
 :deep(.el-input-number) {
-  width: 100%
+  width: 100%;
 }
 </style>

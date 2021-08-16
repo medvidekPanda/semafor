@@ -5,6 +5,6 @@ export interface SemaforResultBase {
   rounds?: SemaforRound[];
 }
 export default interface SemaforResult {
-  mobile?: SemaforResult;
-  desktop?: SemaforResult;
+  mobile?: SemaforResultBase;
+  desktop?: SemaforResultBase;
 }

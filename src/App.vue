@@ -7,7 +7,7 @@
       <el-link :underline="false">
         <router-link to="/admin">Administrace</router-link>
       </el-link>
-      <p>v0.9b</p>
+      <p>v0.10b</p>
     </el-space>
   </el-header>
   <router-view />
