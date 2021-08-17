@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex-50"
+    class="flex-50 overflow-y"
     :class="{
       'margin-top-4 margin-bottom-1': windowWidth < 960,
     }"

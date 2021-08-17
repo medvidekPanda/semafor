@@ -46,12 +46,12 @@
       >
     </el-form>
     <p>
-      Cílem této hry je posoudit reakční čas české populace. Vyplněním a
-      odeslání formuláře dáváte souhlas se zpracováním demografických údajů (věk
-      a pohlaví) k výzkumným účelům. Formulář nesbírá osobní údaje. Vyplnění
-      křestního jména a e-mailu slouží pouze pro hashovací funkci (více zde) a
-      vytvoření identifikačního kódu v databázi. Účelem vytvoření tohoto kódu je
-      zabránit duplikaci odeslaných odpovědí. Celá hra je tak anonymní.
+      Vyplněním a odeslání formuláře dáváte souhlas se zpracováním
+      demografických údajů (věk a pohlaví) k výzkumným účelům. Formulář nesbírá
+      osobní údaje. Vyplnění křestního jména a e-mailu slouží pouze pro
+      hashovací funkci <el-link href="https://www.digitalnipevnost.cz/viki/hash" target="_blank">(více zde)</el-link>
+      a vytvoření identifikačního kódu v databázi. Účelem vytvoření tohoto kódu
+      je zabránit duplikaci odeslaných odpovědí. Celý test je tak anonymní.
     </p>
   </el-space>
 </template>
@@ -71,9 +71,9 @@ import { Device } from "@capacitor/device";
 
 let formData: ResultsForm = {
   age: 6,
-  email: "email@test.local",
-  name: "Honza",
-  sex: "male",
+  email: "",
+  name: "",
+  sex: "",
 };
 
 let isMobile: boolean;
@@ -83,7 +83,9 @@ export default defineComponent({
   computed: {
     isButtonDisabled(): Store<ResultPost> {
       const store = this.$store.state.results;
-      return store && store[isMobile ? "mobile" : "desktop"]?.rounds?.length === 5;
+      return (
+        store && store[isMobile ? "mobile" : "desktop"]?.rounds?.length === 5
+      );
     },
   },
   data() {
@@ -109,7 +111,8 @@ export default defineComponent({
   },
   async mounted() {
     const info = await Device.getInfo();
-    isMobile = info.operatingSystem === "ios" || info.operatingSystem === "android";
+    isMobile =
+      info.operatingSystem === "ios" || info.operatingSystem === "android";
   },
   methods: {
     onSubmitForm() {

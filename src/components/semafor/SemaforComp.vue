@@ -30,23 +30,29 @@
       :disabled="!(round > 0 && round < 6) || !greenActive"
       type="danger"
       style="width: 100%"
-      >Klikni když je semafor zelený</el-button
+      >Klikni, když je semafor zelený</el-button
     >
   </el-space>
 
   <el-dialog
-    title="Jak hrát"
+    title="Jak test funguje"
     v-model="aboutTestDialog"
     :fullscreen="windowWidth < 960"
   >
-    Hru spustíte kliknutím na tlačítko “Začít hru”. Až semafor přeskočí z
-    červené na zelenou, co nejrychleji klikněte na tlačítko “Klikni, když je
-    semafor zelený”, nebo zmáčkněte mezerník. Test proběhne celkem pětkrát v
-    různých časových intervalech. Výsledný reakční čas je průměr těchto pěti
-    pokusů. Průměrný čas vyplňte společně s křestním jménem, demografickými
-    údaji a e-mailem do formuláře níže a klikněte na tlačítko odeslat. TIP: Hru
-    si nejprve vyzkoušejte na nečisto a až poté proveďte ostrý pokus. Test si
-    můžete zopakovat vícekrát. Odesílejte však pouze jednu odpověď na osobu.
+    <p>
+      Cílem tohoto testu je posoudit reakční čas české populace. Test spustíte
+      kliknutím na tlačítko <strong>“Spustit test”</strong>. Až semafor přeskočí
+      z červené na zelenou, co nejrychleji klikněte na tlačítko “Klikni, když je
+      semafor zelený”, nebo zmáčkněte mezerník.
+      <strong>Prosím nekombinujte způsob zadávání.</strong> Test
+      proběhne celkem pětkrát v různých časových intervalech. Výsledný reakční
+      čas je průměr těchto pěti pokusů.
+    </p>
+    <p>
+      TIP: Hru si nejprve vyzkoušejte na nečisto a až poté proveďte ostrý pokus.
+      Test si můžete zopakovat vícekrát. Odesílejte však pouze jednu odpověď na
+      osobu.
+    </p>
   </el-dialog>
 </template>
 

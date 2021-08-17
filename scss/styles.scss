@@ -1,8 +1,5 @@
-body {
-  height: 100vh;
-  width: 100vw;
-  box-sizing: border-box;
-  margin: 0;
+:root {
+  --el-main-padding: 8px 16px;
 }
 
 .el-col {
@@ -35,4 +32,8 @@ a {
 
 .flex-50 {
   flex: 1 1 50%;
+}
+
+.overflow-y {
+  overflow-y: auto;
 }

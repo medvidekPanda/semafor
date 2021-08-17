@@ -35,7 +35,7 @@ export const actions = {
             result.exists && state.isMobile && !data?.mobile ||
             result.exists && !state.isMobile && !data?.desktop
           ) {
-            resolve(db.update(state.results || {}));
+            resolve(db.update({ uid, ...state.results } || {}));
           } else {
             reject(`Záznam s hashem ${result.id} již existuje!`);
           }

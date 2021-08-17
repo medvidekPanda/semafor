@@ -86,6 +86,7 @@ export default defineComponent({
 .footer,
 .main-section {
   display: flex;
+  overflow: hidden;
 }
 
 .footer {
