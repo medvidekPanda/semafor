@@ -1,10 +1,10 @@
 <template>
   <el-header>
     <el-space wrap size="large" class="header-custom">
-      <h6>v0.13</h6>
+      <h6>v0.14</h6>
       <el-space>
-        <el-button size="mini" type="flat" icon="el-icon-s-home" v-on:click="goToHome()"></el-button>
-        <el-button size="mini" type="flat" icon="el-icon-setting" v-on:click="goToAdmin()"></el-button>
+        <el-button size="mini" icon="el-icon-s-home" v-on:click="goToHome()"></el-button>
+        <el-button size="mini" icon="el-icon-setting" v-on:click="goToAdmin()"></el-button>
       </el-space>
     </el-space>
   </el-header>
