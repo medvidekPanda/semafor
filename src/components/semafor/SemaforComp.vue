@@ -2,7 +2,7 @@
   <el-space
     :size="size"
     :direction="windowWidth >= 960 ? 'horizontal' : 'vertical'"
-    class="flex-50"
+    class="flex-3"
     alignment="flex-start"
     :fill="fill"
   >
@@ -37,7 +37,7 @@
   <el-dialog
     title="Jak test funguje"
     v-model="aboutTestDialog"
-    :fullscreen="windowWidth < 960"
+    :fullscreen="windowWidth < 600"
   >
     <p>
       Cílem tohoto testu je posoudit reakční čas české populace. Test spustíte
@@ -205,8 +205,10 @@ export default defineComponent({
   }
 
   @media (min-width: 960px) {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
+    max-width: 200px;
+    max-height: 200px;
 
     &-wrapper {
       flex-direction: column;

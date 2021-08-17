@@ -1,5 +1,5 @@
 <template>
-  <el-space wrap :size="size" direction="vertical" alignment="start">
+  <el-space :size="size" direction="vertical" alignment="start" class="overflow-y">
     <el-form
       ref="formData"
       :model="formData"
@@ -8,7 +8,7 @@
     >
       <el-form-item label="Křestní jméno">
         <el-input v-model="formData.name"></el-input>
-        <p v-if="errors[1]">{{ errors[1] }}</p>
+        <p class="error" v-if="errors[1]">{{ errors[1] }}</p>
       </el-form-item>
       <el-row :gutter="16" justify="center">
         <el-col :span="9">
@@ -18,7 +18,7 @@
               :min="6"
               :max="99"
             ></el-input-number>
-            <p v-if="errors[0]">{{ errors[0] }}</p>
+            <p class="error" v-if="errors[0]">{{ errors[0] }}</p>
           </el-form-item>
         </el-col>
         <el-col :span="15">
@@ -28,13 +28,13 @@
               :options="dropDownSex"
               placeholder="Vyber..."
             ></el-cascader>
-            <p v-if="errors[2]">{{ errors[2] }}</p>
+            <p class="error" v-if="errors[2]">{{ errors[2] }}</p>
           </el-form-item>
         </el-col>
       </el-row>
       <el-form-item label="E-mail">
         <el-input v-model="formData.email" type="email"></el-input>
-        <p v-if="errors[3]">{{ errors[3] }}</p>
+        <p class="error" v-if="errors[3]">{{ errors[3] }}</p>
       </el-form-item>
       <el-button
         type="primary"

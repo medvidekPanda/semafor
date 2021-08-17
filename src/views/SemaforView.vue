@@ -3,9 +3,7 @@
     <section class="main-section">
       <SemaforComp />
       <ResultsListComp />
-      <section class="result-form">
-        <NewResultFormComp />
-      </section>
+      <NewResultFormComp class="result-form flex-3" />
     </section>
     <footer class="footer">
       <el-button
@@ -20,7 +18,7 @@
     <el-dialog
       title="Odeslat výsledky"
       v-model="submitFormDialog"
-      :fullscreen="windowWidth < 960"
+      :fullscreen="windowWidth < 600"
     >
       <NewResultFormComp />
     </el-dialog>
@@ -48,8 +46,8 @@ export default defineComponent({
       return this.$store.state.isFinished;
     },
     windowWidth(): Store<ResultPost> {
-      return this.$store.state.windowWidth
-    }
+      return this.$store.state.windowWidth;
+    },
   },
   data() {
     return {
@@ -129,7 +127,7 @@ export default defineComponent({
   }
 
   .result-form {
-    flex: 1 1 50%;
+    flex-direction: column;
   }
 }
 </style>

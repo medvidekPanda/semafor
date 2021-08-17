@@ -30,10 +30,31 @@ a {
   }
 }
 
-.flex-50 {
-  flex: 1 1 50%;
+.flex {
+  &-1 {
+    flex: 1 1 0;
+  }
+
+  &-2 {
+    flex: 2 1 0;
+  }
+
+  &-3 {
+    flex: 3 1 0;
+  }
+
+  &-50 {
+    flex: 1 1 50%;
+  }
 }
 
 .overflow-y {
   overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.error {
+  margin: 4px 0;
+  color: var(--el-color-danger);
+  line-height: 1.5;
 }
