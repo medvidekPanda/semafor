@@ -40,7 +40,7 @@
     :fullscreen="windowWidth < 600"
   >
     <p>
-      Cílem tohoto testu je posoudit reakční čas české populace. Test spustíte
+      Cílem tohoto testu je posoudit reakční čas české a slovenské populace. Test spustíte
       kliknutím na tlačítko <strong>“Spustit test”</strong>. Až semafor přeskočí
       z červené na zelenou, co nejrychleji klikněte na tlačítko “Klikni, když je
       semafor zelený”, nebo zmáčkněte mezerník.
