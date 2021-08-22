@@ -24,8 +24,8 @@
         >Resetovat</el-button
       >
     </el-space>
+    <p>Zbývající počet kliknutí: {{ clicksCount }}</p>
     <section class="semafor-wrapper">
-      <p>Zbývající počet kliknutí: {{ clicksCount }}</p>
       <div
         class="bg-purple semafor red"
         v-bind:class="{ active: redActive }"
