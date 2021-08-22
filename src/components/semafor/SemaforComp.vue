@@ -10,11 +10,22 @@
       <el-button type="primary" @click="aboutTestDialog = true" plain
         >O testu</el-button
       >
-      <el-button v-on:click="onTestStart()" type="success" :disabled="isStarted"
+      <el-button
+        v-if="!isStarted"
+        v-on:click="onTestStart()"
+        type="success"
+        :disabled="isStarted"
         >Spustit test</el-button
+      >
+      <el-button
+        v-if="isStarted"
+        v-on:click="reloadPage()"
+        type="danger"
+        >Resetovat</el-button
       >
     </el-space>
     <section class="semafor-wrapper">
+      <p>Zbývající počet kliknutí: {{ clicksCount }}</p>
       <div
         class="bg-purple semafor red"
         v-bind:class="{ active: redActive }"
@@ -25,9 +36,8 @@
       ></div>
     </section>
     <el-button
+      :disabled="!isStarted"
       @mousedown="onButtonClick()"
-      @click.space="onSpaceSqueeze()"
-      :disabled="!(round > 0 && round < 6) || !greenActive"
       type="danger"
       style="width: 100%"
       >Klikni, když je semafor zelený</el-button
@@ -40,19 +50,41 @@
     :fullscreen="windowWidth < 600"
   >
     <p>
-      Cílem tohoto testu je posoudit reakční čas české a slovenské populace. Test spustíte
-      kliknutím na tlačítko <strong>“Spustit test”</strong>. Až semafor přeskočí
-      z červené na zelenou, co nejrychleji klikněte na tlačítko “Klikni, když je
-      semafor zelený”, nebo zmáčkněte mezerník.
-      <strong>Prosím nekombinujte způsob zadávání.</strong> Test
-      proběhne celkem pětkrát v různých časových intervalech. Výsledný reakční
-      čas je průměr těchto pěti pokusů.
+      Cílem tohoto testu je posoudit reakční čas české a slovenské populace.
+      Test spustíte kliknutím na tlačítko <strong>“Spustit test”</strong>. Až
+      semafor přeskočí z červené na zelenou, co nejrychleji klikněte na tlačítko
+      “Klikni, když je semafor zelený”, nebo zmáčkněte mezerník.
+      <strong>Prosím nekombinujte způsob zadávání.</strong> Test proběhne celkem
+      pětkrát v různých časových intervalech. Výsledný reakční čas je průměr
+      těchto pěti pokusů.
     </p>
     <p>
       TIP: Hru si nejprve vyzkoušejte na nečisto a až poté proveďte ostrý pokus.
       Test si můžete zopakovat vícekrát. Odesílejte však pouze jednu odpověď na
       osobu.
     </p>
+  </el-dialog>
+
+  <el-dialog
+    title="Maximální počet kliknutí"
+    v-model="maxCountDialog"
+    :show-close="showClose"
+    :close-on-click-modal="showClose"
+    :fullscreen="windowWidth < 600"
+  >
+    <span
+      >Překročen maxímální povolený počet kliknutí. Stránka se načte
+      znovu.</span
+    >
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button
+          type="primary"
+          @click="(maxCountDialog = false), reloadPage()"
+          >Resetovat</el-button
+        >
+      </span>
+    </template>
   </el-dialog>
 </template>
 
@@ -78,6 +110,7 @@ export default defineComponent({
       info.operatingSystem === "ios" || info.operatingSystem === "android";
     this.$store.dispatch("saveSemaforResults", { isMobile });
     window.addEventListener("keydown", (e) => {
+      this.checkCounts();
       if (
         e.code === "Space" &&
         this.round > 0 &&
@@ -107,6 +140,9 @@ export default defineComponent({
       fill,
       size,
       aboutTestDialog: false,
+      clicksCount: 10,
+      maxCountDialog: false,
+      showClose: false,
     };
   },
   methods: {
@@ -115,6 +151,7 @@ export default defineComponent({
       this.round = 0;
       this.results = [];
       this.$store.dispatch("clearStore");
+      this.clicksCount = 10;
       this.startTimer();
     },
     startTimer() {
@@ -131,7 +168,17 @@ export default defineComponent({
       }, timeout);
     },
     onButtonClick() {
-      this.onSaveResult();
+      this.checkCounts();
+      if (this.greenActive) {
+        this.onSaveResult();
+      }
+    },
+    checkCounts() {
+      if (this.clicksCount <= 1) {
+        this.maxCountDialog = true;
+      } else {
+        this.clicksCount--;
+      }
     },
     onSaveResult() {
       const clickTime = Date.now();
@@ -167,6 +214,10 @@ export default defineComponent({
       }
 
       return number / this.results.length;
+    },
+    reloadPage() {
+      location.reload();
+      return false;
     },
   },
 });
