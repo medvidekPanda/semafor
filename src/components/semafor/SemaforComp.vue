@@ -110,13 +110,13 @@ export default defineComponent({
       info.operatingSystem === "ios" || info.operatingSystem === "android";
     this.$store.dispatch("saveSemaforResults", { isMobile });
     window.addEventListener("keydown", (e) => {
-      this.checkCounts();
       if (
         e.code === "Space" &&
         this.round > 0 &&
         this.round < 6 &&
         this.greenActive
       ) {
+        this.checkCounts();
         this.onSaveResult();
       }
     });

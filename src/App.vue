@@ -1,7 +1,7 @@
 <template>
   <el-header>
     <el-space wrap size="large" class="header-custom">
-      <h6>v1.1.0-dev</h6>
+      <h6>v1.2.0-dev</h6>
       <el-space>
         <el-button size="mini" icon="el-icon-s-home" v-on:click="goToHome()"></el-button>
         <el-button size="mini" icon="el-icon-setting" v-on:click="goToAdmin()"></el-button>

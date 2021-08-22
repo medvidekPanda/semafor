@@ -1,11 +1,13 @@
 <template>
-  <div>Admin</div>
+  <AdminComp />
 </template>
 
 <script lang="ts">
 import { onMounted, defineComponent } from "vue";
 import firebase from "firebase/app";
 import "firebase/auth";
+
+import AdminComp from "@/components/admin/AdminComp.vue";
 import router from "../../router";
 
 export default defineComponent({
@@ -19,7 +21,9 @@ export default defineComponent({
       }
     });
   },
-  components: {},
+  components: {
+    AdminComp
+  },
   methods: {},
   data() {
     return {};

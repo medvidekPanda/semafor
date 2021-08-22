@@ -153,10 +153,11 @@ export default defineComponent({
       const results: PostForm = {
         age: Number(this.formData.age),
         sex: this.formData.sex,
+        hash: this.hashData(),
       };
 
       await this.$store.dispatch("saveSemaforResults", {
-        id: this.hashData(),
+        id: results.hash,
         results,
       });
 
