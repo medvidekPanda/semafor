@@ -1,5 +1,5 @@
 <template>
-  <div><LoginComp /></div>
+  <LoginComp />
 </template>
 
 <script lang="ts">

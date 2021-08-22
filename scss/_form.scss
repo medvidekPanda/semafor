@@ -1,0 +1,14 @@
+.el-form-item {
+  flex-direction: column;
+}
+
+.el-form-item__label {
+  line-height: 24px;
+}
+
+.el-col {
+  &.center {
+    display: flex;
+    justify-content: center;
+  }
+}

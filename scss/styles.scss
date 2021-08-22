@@ -1,51 +1,14 @@
+@import "./flex";
+@import "./form";
+@import "./spacing";
+
 :root {
   --el-main-padding: 8px 16px;
-}
-
-.el-col {
-  &.center {
-    display: flex;
-    justify-content: center;
-  }
 }
 
 a {
   color: inherit;
   text-decoration: none;
-}
-
-.no-margin {
-  margin: 0;
-}
-
-.margin {
-  @for $i from 1 through 10 {
-    &-top-#{$i} {
-      margin-top: $i*8px;
-    }
-
-    &-bottom-#{$i} {
-      margin-bottom: $i*8px;
-    }
-  }
-}
-
-.flex {
-  &-1 {
-    flex: 1 1 0;
-  }
-
-  &-2 {
-    flex: 2 1 0;
-  }
-
-  &-3 {
-    flex: 3 1 0;
-  }
-
-  &-50 {
-    flex: 1 1 50%;
-  }
 }
 
 .overflow-y {

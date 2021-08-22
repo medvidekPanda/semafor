@@ -179,14 +179,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-:deep(.el-form-item) {
-  flex-direction: column;
-}
-
-:deep(.el-form-item__label) {
-  line-height: 24px;
-}
-
 :deep(.el-input-number) {
   min-width: 128px;
 }

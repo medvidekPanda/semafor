@@ -1,19 +1,34 @@
 <template>
-  <h1>Přihlášení k účtu</h1>
-  <p><input type="text" placeholder="Email" v-model="email" /></p>
-  <p><input type="password" placeholder="Heslo" v-model="password" /></p>
-  <p><button @click="signIn()">Přihlásit</button></p>
-  <p><button @click="logout()">Odhlásit</button></p>
+  <el-form
+    ref="formData"
+    :model="formData"
+    label-width="180px"
+    label-position="left"
+    style="max-width: 200px"
+    class="align--self-center margin-top-5"
+  >
+    <el-form-item label="Přihlašovací jméno">
+      <el-input v-model="formData.email"></el-input>
+    </el-form-item>
+    <el-form-item label="Heslo">
+      <el-input v-model="formData.password" type="password"></el-input>
+    </el-form-item>
+    <el-button type="primary" plain size="medium" @click="signIn()"
+      >Přihlásit</el-button
+    >
+  </el-form>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import firebase from "firebase/app";
 import "firebase/auth";
 import router from "../../router";
 
-const email = ref("");
-const password = ref("");
+let formData = {
+  email: "",
+  password: "",
+};
 
 export default defineComponent({
   name: "LoginComp",
@@ -22,15 +37,14 @@ export default defineComponent({
   },
   data() {
     return {
-      email,
-      password,
+      formData,
     };
   },
   methods: {
     signIn() {
       firebase
         .auth()
-        .signInWithEmailAndPassword(email.value, password.value)
+        .signInWithEmailAndPassword(formData.email, formData.password)
         .then(() => {
           console.log("Přihlášení úspěšné");
           router.replace("/admin");
