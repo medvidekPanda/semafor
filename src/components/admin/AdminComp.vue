@@ -2,9 +2,9 @@
   <div>
     <p>Počet záznamů v databázi: {{ totalCount }}</p>
     <p v-for="doc in finalDocs" :key="doc">
-      {{ doc.id }}
+      {{ doc }}
     </p>
-    <el-button type="primary" plain size="medium" @click="loadResults()"
+    <el-button type="primary" plain size="medium" @click="loadResults()" :disabled="finalDocs < 6"
       >Další</el-button
     >
   </div>
@@ -12,11 +12,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
-
-import { FirebaseDocs } from "../../config/firebase";
 
 export default defineComponent({
   name: "AdminComp",
@@ -26,33 +21,24 @@ export default defineComponent({
   data() {
     return {
       totalCount: 0,
-      lastDoc: "" as any,
       finalDocs: "" as any,
     };
   },
   async mounted() {
-    await firebase
-      .firestore()
-      .collection(FirebaseDocs.firebaseDocName)
-      .get()
-      .then((res) => (this.totalCount = res.size));
+    this.$store.dispatch("getAllDb");
+    this.totalCount = this.$store.getters.numberOfResults;
 
     this.loadResults();
+    // this.$store.dispatch("getDocDb", "2c73fd790b9405a5981c150b69649ecc");
+    // console.log("doc", this.$store.getters.dbDocument);
   },
   methods: {
-    async loadResults() {
-      await firebase
-        .firestore()
-        .collection(FirebaseDocs.firebaseDocName)
-        .orderBy("hash")
-        .startAfter(this.lastDoc)
-        .limit(3)
-        .get()
-        .then((result) => {
-          this.lastDoc = result.docs[result.docs.length - 1];
-          this.finalDocs = result.docs;
-          console.log("test 2", result);
-        });
+    loadResults() {
+      this.$store.dispatch("getDbPagination", { orderBy: "hash", limit: 5 });
+      // console.log("docs", this.$store.getters.dbPagination);
+      this.$store.dispatch("getDocDb");
+      this.finalDocs = this.$store.getters.dbDocument;
+      console.log("docs final", this.finalDocs);
     },
   },
 });

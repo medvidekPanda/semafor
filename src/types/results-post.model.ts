@@ -7,4 +7,8 @@ export default interface ResultPost {
   isMobile?: boolean;
   results?: SemaforResult & PostForm & { inputDevice?: string };
   windowWidth: number;
+  dbResponse?: any;
+  dbPagination?: any[];
+  dbDoc?: any[];
+  lastDoc: any;
 }
