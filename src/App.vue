@@ -1,10 +1,18 @@
 <template>
   <el-header>
     <el-space wrap size="large" class="header-custom">
-      <h6>v1.2.0-dev</h6>
+      <h6>v1.3.0-{{ environment }}</h6>
       <el-space>
-        <el-button size="mini" icon="el-icon-s-home" v-on:click="goToHome()"></el-button>
-        <el-button size="mini" icon="el-icon-setting" v-on:click="goToAdmin()"></el-button>
+        <el-button
+          size="mini"
+          icon="el-icon-s-home"
+          v-on:click="goToHome()"
+        ></el-button>
+        <el-button
+          size="mini"
+          icon="el-icon-setting"
+          v-on:click="goToAdmin()"
+        ></el-button>
       </el-space>
     </el-space>
   </el-header>
@@ -16,17 +24,23 @@ import { defineComponent } from "vue";
 import router from "./router";
 
 export default defineComponent({
+  data() {
+    return {
+      environment: "",
+    };
+  },
   mounted() {
+    this.environment = process.env.NODE_ENV.substring(0, 3);
     document.title = process.env.VUE_APP_TITLE;
   },
   methods: {
     goToAdmin() {
-      router.push('admin')
+      router.push("admin");
     },
     goToHome() {
-      router.push('/')
-    }
-  }
+      router.push("/");
+    },
+  },
 });
 </script>
 

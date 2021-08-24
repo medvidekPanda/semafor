@@ -17,31 +17,26 @@
         :disabled="isStarted"
         >Spustit test</el-button
       >
-      <el-button
-        v-if="isStarted"
-        v-on:click="reloadPage()"
-        type="danger"
+      <el-button v-if="isStarted" v-on:click="reloadPage()" type="danger"
         >Resetovat</el-button
       >
     </el-space>
-    <p>Zbývající počet kliknutí: {{ clicksCount }}</p>
     <section class="semafor-wrapper">
       <div
         class="bg-purple semafor red"
         v-bind:class="{ active: redActive }"
       ></div>
       <div
-        class="bg-purple semafor green"
+        class="bg-purple semafor green clickable"
         v-bind:class="{ active: greenActive }"
-      ></div>
+        @mousedown="onButtonClick()"
+      >
+        Klikni zde
+      </div>
     </section>
-    <el-button
-      :disabled="!isStarted"
-      @mousedown="onButtonClick()"
-      type="danger"
-      style="width: 100%"
-      >Klikni, když je semafor zelený</el-button
-    >
+    <p class="no-margin no-padding">
+      Zbývající počet kliknutí: {{ clicksCount }}
+    </p>
   </el-space>
 
   <el-dialog
@@ -52,8 +47,8 @@
     <p>
       Cílem tohoto testu je posoudit reakční čas české a slovenské populace.
       Test spustíte kliknutím na tlačítko <strong>“Spustit test”</strong>. Až
-      semafor přeskočí z červené na zelenou, co nejrychleji klikněte na tlačítko
-      “Klikni, když je semafor zelený”, nebo zmáčkněte mezerník.
+      semafor přeskočí z červené na zelenou, co nejrychleji klikněte na zelený
+      semafor, nebo zmáčkněte mezerník.
       <strong>Prosím nekombinujte způsob zadávání.</strong> Test proběhne celkem
       pětkrát v různých časových intervalech. Výsledný reakční čas je průměr
       těchto pěti pokusů.
@@ -225,6 +220,9 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .semafor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: var(--el-border-base);
   box-shadow: var(--el-box-shadow-base);
   border-radius: var(--el-border-radius-circle);
@@ -236,6 +234,7 @@ export default defineComponent({
     }
 
     &.green {
+      color: var(--el-color-success-lighter);
       background-color: var(--el-color-success);
     }
   }
