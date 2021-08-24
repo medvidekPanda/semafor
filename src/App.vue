@@ -1,7 +1,7 @@
 <template>
   <el-header>
     <el-space wrap size="large" class="header-custom">
-      <h6>v1.3.0-{{ environment }}</h6>
+      <h6>v1.3.2-{{ environment }}</h6>
       <el-space>
         <el-button
           size="mini"
