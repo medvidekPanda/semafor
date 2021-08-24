@@ -31,7 +31,7 @@
         class="bg-purple semafor green"
         v-bind:class="{ active: greenActive }"
       >
-        <p>Klikni na tlačítko</p>
+        <p class="no-margin padding-top-1">Klikni</p>
         <el-icon size="32">
           <ArrowDown />
         </el-icon>

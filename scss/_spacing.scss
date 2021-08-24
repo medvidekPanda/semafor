@@ -13,3 +13,11 @@
     }
   }
 }
+
+.padding {
+  @for $i from 1 through 10 {
+    &-top-#{$i} {
+      margin-top: $i*8px;
+    }
+  }
+}
