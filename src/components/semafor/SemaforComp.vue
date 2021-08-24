@@ -17,10 +17,7 @@
         :disabled="isStarted"
         >Spustit test</el-button
       >
-      <el-button
-        v-if="isStarted"
-        v-on:click="reloadPage()"
-        type="danger"
+      <el-button v-if="isStarted" v-on:click="reloadPage()" type="danger"
         >Resetovat</el-button
       >
     </el-space>
@@ -33,7 +30,12 @@
       <div
         class="bg-purple semafor green"
         v-bind:class="{ active: greenActive }"
-      ></div>
+      >
+        <p>Klikni na tlačítko</p>
+        <el-icon size="32">
+          <ArrowDown />
+        </el-icon>
+      </div>
     </section>
     <el-button
       :disabled="!isStarted"
@@ -92,6 +94,7 @@
 import { defineComponent } from "vue";
 import { Store } from "vuex";
 import { Device } from "@capacitor/device";
+import { ArrowDown } from "@element-plus/icons";
 
 import SemaforRound from "../../types/results-round";
 import ResultPost from "@/types/results-post.model";
@@ -120,6 +123,9 @@ export default defineComponent({
         this.onSaveResult();
       }
     });
+  },
+  components: {
+    ArrowDown,
   },
   computed: {
     windowWidth(): Store<ResultPost> {
@@ -225,6 +231,12 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .semafor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--el-color-danger);
+  font-weight: 700;
   border: var(--el-border-base);
   box-shadow: var(--el-box-shadow-base);
   border-radius: var(--el-border-radius-circle);
@@ -237,6 +249,7 @@ export default defineComponent({
 
     &.green {
       background-color: var(--el-color-success);
+      color: var(--el-color-success-light);
     }
   }
 
