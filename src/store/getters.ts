@@ -1,13 +1,15 @@
+import { DocumentData } from "@firebase/firestore-types";
+
 import ResultPost from '@/types/results-post.model';
 
 export const getters = {
-  numberOfResults: (state: ResultPost): number => {
-    return state.dbResponse?.docs.length;
+  numberOfDocs: (state: Partial<ResultPost>): number => {
+    return state.allDocsResponse?.docs.length || 0;
   },
-  dbPagination: (state: ResultPost): any => {
-    return state.dbPagination;
+  docsIdsToLoad: (state: Partial<ResultPost>): string[] | undefined => {
+    return state.docsIdsToLoad;
   },
-  dbDocument: (state: ResultPost): any => {
-    return state.dbDoc;
+  dbDocPaginated: (state: Partial<ResultPost>): DocumentData | undefined => {
+    return state.dbDocPaginated;
   },
 };

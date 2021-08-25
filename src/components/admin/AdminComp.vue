@@ -1,9 +1,6 @@
 <template>
-  <div>
+  <div style="overflow-y: auto">
     <p>Počet záznamů v databázi: {{ totalCount }}</p>
-    <!-- <p v-for="doc in finalDocs" :key="doc">
-      {{ doc }}
-    </p> -->
     <el-table v-if="finalDocs.length > 0" :data="finalDocs" stripe>
       <el-table-column prop="hash" label="Hash" width="280"> </el-table-column>
       <el-table-column prop="age" label="Věk" width="50"> </el-table-column>
@@ -83,6 +80,9 @@
       :disabled="finalDocs < 11"
       >Další</el-button
     >
+    <el-button type="primary" plain size="medium" @click="logout()"
+      >logout</el-button
+    >
   </div>
 </template>
 
@@ -90,6 +90,9 @@
 import { defineComponent } from "vue";
 import firebase from "firebase/app";
 import "firebase/auth";
+import { DocumentData } from "@firebase/firestore-types";
+
+let startAfter: string;
 
 export default defineComponent({
   name: "AdminComp",
@@ -100,25 +103,32 @@ export default defineComponent({
     const user = firebase.auth().currentUser;
     console.log("user", user);
     if (user) {
-      this.$store.dispatch("getAllDb");
+      this.$store.dispatch("getAllDocs");
       this.loadResults();
     }
-
-    // this.$store.dispatch("getDocDb", "2c73fd790b9405a5981c150b69649ecc");
-    // console.log("doc", this.$store.getters.dbDocument);
   },
   computed: {
-    totalCount(): any {
-      return this.$store.getters.numberOfResults;
+    totalCount(): number {
+      return this.$store.getters.numberOfDocs;
     },
-    finalDocs(): any {
-      return this.$store.getters.dbDocument;
+    finalDocs(): DocumentData {
+      const docs = this.$store.getters.dbDocPaginated;
+      console.log("docs", docs);
+      startAfter = docs[docs.length - 1]?.hash || "";
+      return docs;
     },
   },
   methods: {
-    loadResults() {
-      this.$store.dispatch("getDbPagination", { orderBy: "hash", limit: 10 });
-      this.$store.dispatch("getDocDb");
+    async loadResults() {
+      await this.$store.dispatch("getdocsIdsToLoad", {
+        orderBy: "hash",
+        startAfter,
+        limit: 10,
+      });
+      await this.$store.dispatch("getDocsById");
+    },
+    logout() {
+      firebase.auth().signOut();
     },
   },
 });

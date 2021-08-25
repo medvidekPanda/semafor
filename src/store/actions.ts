@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ActionContext } from "vuex";
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -7,7 +5,6 @@ import "firebase/auth";
 
 import ResultPost from "../types/results-post.model";
 import { FirebaseDocs } from "@/config/firebase";
-// import { QueryDocumentSnapshot, DocumentData } from "@firebase/firestore-types";
 
 export const actions = {
   async saveSemaforResults(
@@ -63,37 +60,35 @@ export const actions = {
   ): void {
     commit("getWindowWidth", payload);
   },
-  async getAllDb({
-    state,
+  async getAllDocs({
+    commit,
   }: ActionContext<ResultPost, ResultPost>): Promise<void> {
     const db = firebase.firestore().collection(FirebaseDocs.firebaseDocName);
-    await db.get().then((res) => (state.dbResponse = res));
+    await db.get().then((res) => commit("getAllDocs", res));
   },
-  getDbPagination(
-    { state }: ActionContext<ResultPost, ResultPost>,
-    { orderBy, limit }: any
-  ): void {
-    // let lastDoc: QueryDocumentSnapshot<DocumentData> | string = "";
-
+  async getdocsIdsToLoad(
+    { commit }: ActionContext<ResultPost, ResultPost>,
+    { orderBy, startAfter, limit }: any
+  ): Promise<void> {
     const db = firebase
       .firestore()
       .collection(FirebaseDocs.firebaseDocName)
-      .orderBy(orderBy)
-      .startAfter(state.lastDoc)
-      .limit(limit);
-
-    db.get().then((res) => {
-      state.lastDoc = res.docs[res.docs.length - 1];
-      state.dbPagination = res.docs;
+      .orderBy(orderBy || "")
+      .startAfter(startAfter)
+      .limit(limit || 10);
+    await db.get().then((res) => {
+      commit("getdocsIdsToLoad", res);
     });
   },
-  getDocDb({ state }: any): void {
-    state.dbDoc = [];
+  async getDocsById({
+    state,
+    commit,
+  }: ActionContext<ResultPost, ResultPost>): Promise<void> {
     const db = firebase.firestore().collection(FirebaseDocs.firebaseDocName);
-    state.dbPagination?.forEach((element: any) => {
-      db.doc(element.id)
-        .get()
-        .then((res) => state.dbDoc?.push(res.data()));
-    });
+    db.where(firebase.firestore.FieldPath.documentId(), "in", state.docsIdsToLoad)
+      .get()
+      .then((res) => {
+        commit("getDocsById", res);
+      });
   },
 };

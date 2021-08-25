@@ -6,8 +6,7 @@ export const state: ResultPost = {
   isMobile: undefined,
   results: undefined,
   windowWidth: 0,
-  dbResponse: undefined,
-  dbPagination: [],
-  dbDoc: [],
-  lastDoc: "",
+  allDocsResponse: undefined,
+  docsIdsToLoad: [],
+  dbDocPaginated: [],
 };

@@ -1,3 +1,5 @@
+import { QuerySnapshot, DocumentData } from "@firebase/firestore-types";
+
 import PostForm from "./post-form";
 import SemaforResult from "./results-semafor";
 
@@ -7,8 +9,7 @@ export default interface ResultPost {
   isMobile?: boolean;
   results?: SemaforResult & PostForm & { inputDevice?: string };
   windowWidth: number;
-  dbResponse?: any;
-  dbPagination?: any[];
-  dbDoc?: any[];
-  lastDoc: any;
+  allDocsResponse?: QuerySnapshot<DocumentData>;
+  docsIdsToLoad: string[];
+  dbDocPaginated: DocumentData;
 }
