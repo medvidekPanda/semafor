@@ -69,10 +69,10 @@ export const actions = {
     const db = firebase.firestore().collection(FirebaseDocs.firebaseDocName);
     await db.get().then((res) => (state.dbResponse = res));
   },
-  async getDbPagination(
+  getDbPagination(
     { state }: ActionContext<ResultPost, ResultPost>,
     { orderBy, limit }: any
-  ): Promise<any> {
+  ): void {
     // let lastDoc: QueryDocumentSnapshot<DocumentData> | string = "";
 
     const db = firebase
@@ -82,15 +82,15 @@ export const actions = {
       .startAfter(state.lastDoc)
       .limit(limit);
 
-    return await db.get().then((res) => {
+    db.get().then((res) => {
       state.lastDoc = res.docs[res.docs.length - 1];
       state.dbPagination = res.docs;
     });
   },
-  async getDocDb({ state }: any): Promise<void> {
+  getDocDb({ state }: any): void {
     state.dbDoc = [];
     const db = firebase.firestore().collection(FirebaseDocs.firebaseDocName);
-    await state.dbPagination?.forEach((element: any) => {
+    state.dbPagination?.forEach((element: any) => {
       db.doc(element.id)
         .get()
         .then((res) => state.dbDoc?.push(res.data()));
