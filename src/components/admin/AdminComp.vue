@@ -1,7 +1,12 @@
 <template>
   <div style="overflow-y: auto">
     <p>Počet záznamů v databázi: {{ totalCount }}</p>
-    <el-table v-if="finalDocs.length > 0" :data="finalDocs" stripe>
+    <el-table
+      v-if="finalDocs.length > 0"
+      :data="finalDocs"
+      :row-class-name="tableRowClassName"
+    >
+      <el-table-column type="index" :index="indexMethod"></el-table-column>
       <el-table-column prop="hash" label="Hash" width="280"> </el-table-column>
       <el-table-column prop="age" label="Věk" width="50"> </el-table-column>
       <el-table-column prop="sex" label="Pohlaví" width="80"></el-table-column>
@@ -127,9 +132,24 @@ export default defineComponent({
       this.firstIndex = (value - 1) * limit;
       this.loadResults();
     },
+    indexMethod(index: number) {
+      return index + this.firstIndex + 1;
+    },
+    tableRowClassName({ row, rowIndex }: any) {
+      console.log("row", row);
+      console.log("rowIndex", rowIndex);
+
+      if (row?.desktop?.roundedValue) {
+        return "desktop";
+      }
+      return "";
+    },
   },
 });
 </script>
 
 <style scoped lang="scss">
+:deep(.el-table__row.desktop) {
+  background-color: var(--el-color-success-light);
+}
 </style>
