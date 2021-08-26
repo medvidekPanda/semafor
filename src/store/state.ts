@@ -9,4 +9,5 @@ export const state: ResultPost = {
   allDocsResponse: undefined,
   docsIdsToLoad: [],
   dbDocPaginated: [],
+  lastId: 0,
 };

@@ -72,14 +72,12 @@
         </el-table-column>
       </el-table-column>
     </el-table>
-    <el-button
-      type="primary"
-      plain
-      size="medium"
-      @click="loadResults()"
-      :disabled="finalDocs < 11"
-      >Další</el-button
+    <el-pagination
+      layout="prev, pager, next"
+      :total="lastIndex + 1"
+      @current-change="triggerCurrentChange($event)"
     >
+    </el-pagination>
     <el-button type="primary" plain size="medium" @click="logout()"
       >logout</el-button
     >
@@ -92,18 +90,25 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import { DocumentData } from "@firebase/firestore-types";
 
-let startAfter: string;
+const limit = 10;
 
 export default defineComponent({
   name: "AdminComp",
   props: {
     msg: String,
   },
+  data() {
+    return {
+      firstIndex: 0,
+      lastIndex: 0,
+      limit,
+    };
+  },
   async mounted() {
     const user = firebase.auth().currentUser;
-    console.log("user", user);
     if (user) {
-      this.$store.dispatch("getAllDocs");
+      await this.$store.dispatch("getAllDocs");
+      this.lastIndex = this.$store.getters.lastDbIndex;
       this.loadResults();
     }
   },
@@ -112,20 +117,20 @@ export default defineComponent({
       return this.$store.getters.numberOfDocs;
     },
     finalDocs(): DocumentData {
-      const docs = this.$store.getters.dbDocPaginated;
-      console.log("docs", docs);
-      startAfter = docs[docs.length - 1]?.hash || "";
-      return docs;
+      return this.$store.getters.dbDocPaginated;
     },
   },
   methods: {
     async loadResults() {
-      await this.$store.dispatch("getdocsIdsToLoad", {
-        orderBy: "hash",
-        startAfter,
-        limit: 10,
+      this.$store.commit("selectDocsTest", {
+        firstIndex: this.firstIndex,
+        limit,
       });
       await this.$store.dispatch("getDocsById");
+    },
+    triggerCurrentChange(value: number) {
+      this.firstIndex = (value - 1) * limit;
+      this.loadResults();
     },
     logout() {
       firebase.auth().signOut();

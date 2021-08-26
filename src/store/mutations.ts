@@ -1,7 +1,4 @@
-import {
-  QuerySnapshot,
-  DocumentData,
-} from "@firebase/firestore-types";
+import { QuerySnapshot, DocumentData } from "@firebase/firestore-types";
 
 import ResultPost from "../types/results-post.model";
 
@@ -26,15 +23,16 @@ export const mutations = {
     payload: QuerySnapshot<DocumentData>
   ): void {
     state.allDocsResponse = payload;
+    state.lastId = state.allDocsResponse.docs.length - 1 || 0;
   },
   getdocsIdsToLoad(
     state: Partial<ResultPost>,
     payload: QuerySnapshot<DocumentData>
   ): void {
     state.docsIdsToLoad = [];
-    payload.docs.forEach(doc => {
+    payload.docs.forEach((doc) => {
       state.docsIdsToLoad?.push(doc.id);
-    })
+    });
   },
   getDocsById(
     state: Partial<ResultPost>,
@@ -45,5 +43,15 @@ export const mutations = {
       docsIds.push(doc.data());
     });
     state.dbDocPaginated = docsIds;
+  },
+  selectDocsTest(state: Partial<ResultPost>, payload: any): void {
+    state.docsIdsToLoad = [];
+    const lastId = state.lastId || 0;
+    const nextLastIndex = payload.limit + payload.firstIndex;
+    const limit = lastId < nextLastIndex ? lastId + 1 : nextLastIndex;
+
+    for (let i = payload.firstIndex; i < limit; i++) {
+      state.docsIdsToLoad.push(state.allDocsResponse?.docs[i]?.id || "");
+    }
   },
 };

@@ -12,4 +12,7 @@ export const getters = {
   dbDocPaginated: (state: Partial<ResultPost>): DocumentData | undefined => {
     return state.dbDocPaginated;
   },
+  lastDbIndex: (state: Partial<ResultPost>): number => {
+    return state.lastId || 0;
+  },
 };

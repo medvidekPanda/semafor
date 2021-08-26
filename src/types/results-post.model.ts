@@ -12,4 +12,5 @@ export default interface ResultPost {
   allDocsResponse?: QuerySnapshot<DocumentData>;
   docsIdsToLoad: string[];
   dbDocPaginated: DocumentData;
+  lastId: number;
 }

@@ -64,7 +64,9 @@ export const actions = {
     commit,
   }: ActionContext<ResultPost, ResultPost>): Promise<void> {
     const db = firebase.firestore().collection(FirebaseDocs.firebaseDocName);
-    await db.get().then((res) => commit("getAllDocs", res));
+    await db.get().then((res) => {
+      commit("getAllDocs", res)
+    });
   },
   async getdocsIdsToLoad(
     { commit }: ActionContext<ResultPost, ResultPost>,
