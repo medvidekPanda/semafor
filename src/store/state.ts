@@ -10,4 +10,5 @@ export const state: ResultPost = {
   docsIdsToLoad: [],
   dbDocPaginated: [],
   lastId: 0,
+  isLogged: false,
 };

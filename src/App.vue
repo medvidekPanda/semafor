@@ -1,7 +1,7 @@
 <template>
   <el-header>
     <el-space wrap size="large" class="header-custom">
-      <h6>v1.3.5-{{ environment }}</h6>
+      <h6>v1.3.7-{{ environment }}</h6>
       <el-space>
         <el-button
           size="mini"
@@ -13,6 +13,13 @@
           icon="el-icon-setting"
           v-on:click="goToAdmin()"
         ></el-button>
+        <el-button
+          v-if="isLogged"
+          size="mini"
+          icon="el-icon-switch-button"
+          type="danger"
+          v-on:click="logout()"
+        ></el-button>
       </el-space>
     </el-space>
   </el-header>
@@ -21,9 +28,17 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import firebase from "firebase/app";
+import "firebase/auth";
+
 import router from "./router";
 
 export default defineComponent({
+  computed: {
+    isLogged() {
+      return this.$store.getters.isLogged;
+    },
+  },
   data() {
     return {
       environment: "",
@@ -39,6 +54,11 @@ export default defineComponent({
     },
     goToHome() {
       router.push("/");
+    },
+    logout() {
+      firebase.auth().signOut();
+      this.$store.commit("isLogged", false);
+      router.push("/login");
     },
   },
 });

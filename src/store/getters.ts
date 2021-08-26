@@ -1,6 +1,6 @@
 import { DocumentData } from "@firebase/firestore-types";
 
-import ResultPost from '@/types/results-post.model';
+import ResultPost from "@/types/results-post.model";
 
 export const getters = {
   numberOfDocs: (state: Partial<ResultPost>): number => {
@@ -14,5 +14,8 @@ export const getters = {
   },
   lastDbIndex: (state: Partial<ResultPost>): number => {
     return state.lastId || 0;
+  },
+  isLogged: (state: Partial<ResultPost>): boolean | undefined => {
+    return state.isLogged;
   },
 };

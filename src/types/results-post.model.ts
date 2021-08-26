@@ -13,4 +13,5 @@ export default interface ResultPost {
   docsIdsToLoad: string[];
   dbDocPaginated: DocumentData;
   lastId: number;
+  isLogged: boolean;
 }

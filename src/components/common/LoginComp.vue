@@ -47,6 +47,7 @@ export default defineComponent({
         .signInWithEmailAndPassword(formData.email, formData.password)
         .then(() => {
           console.log("Přihlášení úspěšné");
+          this.$store.commit("isLogged", true);
           router.replace("/admin");
         })
         .catch((error) => {

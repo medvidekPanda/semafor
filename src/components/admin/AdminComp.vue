@@ -78,16 +78,11 @@
       @current-change="triggerCurrentChange($event)"
     >
     </el-pagination>
-    <el-button type="primary" plain size="medium" @click="logout()"
-      >logout</el-button
-    >
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import firebase from "firebase/app";
-import "firebase/auth";
 import { DocumentData } from "@firebase/firestore-types";
 
 const limit = 10;
@@ -105,8 +100,8 @@ export default defineComponent({
     };
   },
   async mounted() {
-    const user = firebase.auth().currentUser;
-    if (user) {
+    const isLogged = this.$store.getters.isLogged;
+    if (isLogged) {
       await this.$store.dispatch("getAllDocs");
       this.lastIndex = this.$store.getters.lastDbIndex;
       this.loadResults();
@@ -131,9 +126,6 @@ export default defineComponent({
     triggerCurrentChange(value: number) {
       this.firstIndex = (value - 1) * limit;
       this.loadResults();
-    },
-    logout() {
-      firebase.auth().signOut();
     },
   },
 });

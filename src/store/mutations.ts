@@ -54,4 +54,7 @@ export const mutations = {
       state.docsIdsToLoad.push(state.allDocsResponse?.docs[i]?.id || "");
     }
   },
+  isLogged(state: Partial<ResultPost>, payload: boolean): void {
+    state.isLogged = payload;
+  },
 };
