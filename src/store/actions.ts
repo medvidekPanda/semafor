@@ -1,5 +1,6 @@
 import { ActionContext } from "vuex";
 import firebase from "firebase/app";
+import { WhereFilterOp } from "@firebase/firestore-types";
 import "firebase/firestore";
 import "firebase/auth";
 
@@ -65,32 +66,29 @@ export const actions = {
   }: ActionContext<ResultPost, ResultPost>): Promise<void> {
     const db = firebase.firestore().collection(FirebaseDocs.firebaseDocName);
     await db.get().then((res) => {
-      commit("getAllDocs", res)
+      commit("getAllDocs", res);
     });
   },
-  async getdocsIdsToLoad(
-    { commit }: ActionContext<ResultPost, ResultPost>,
-    { orderBy, startAfter, limit }: any
+  async getDocsById(
+    { state, commit }: ActionContext<ResultPost, ResultPost>,
+    { commitName, query }: any
   ): Promise<void> {
-    const db = firebase
-      .firestore()
-      .collection(FirebaseDocs.firebaseDocName)
-      .orderBy(orderBy || "")
-      .startAfter(startAfter)
-      .limit(limit || 10);
-    await db.get().then((res) => {
-      commit("getdocsIdsToLoad", res);
-    });
-  },
-  async getDocsById({
-    state,
-    commit,
-  }: ActionContext<ResultPost, ResultPost>): Promise<void> {
     const db = firebase.firestore().collection(FirebaseDocs.firebaseDocName);
-    db.where(firebase.firestore.FieldPath.documentId(), "in", state.docsIdsToLoad)
+    const defaultQuerry = {
+      whatFind: firebase.firestore.FieldPath.documentId(),
+      filterOp: "in",
+      value: state.docsIdsToLoad,
+    };
+    const finalQuerry = query || defaultQuerry;
+
+    db.where(
+      finalQuerry.whatFind,
+      finalQuerry.filterOp as WhereFilterOp,
+      finalQuerry.value
+    )
       .get()
       .then((res) => {
-        commit("getDocsById", res);
+        commit(commitName, res);
       });
   },
 };

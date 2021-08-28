@@ -14,4 +14,7 @@ export default interface ResultPost {
   dbDocPaginated: DocumentData;
   lastId: number;
   isLogged: boolean;
+  resultsAllRounded: { value: number; totalCount: number };
+  resultsAllRoundedDesktop: { value: number; totalCount: number };
+  resultsAllRoundedMobile: { value: number; totalCount: number };
 }

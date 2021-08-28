@@ -25,16 +25,7 @@ export const mutations = {
     state.allDocsResponse = payload;
     state.lastId = state.allDocsResponse.docs.length - 1 || 0;
   },
-  getdocsIdsToLoad(
-    state: Partial<ResultPost>,
-    payload: QuerySnapshot<DocumentData>
-  ): void {
-    state.docsIdsToLoad = [];
-    payload.docs.forEach((doc) => {
-      state.docsIdsToLoad?.push(doc.id);
-    });
-  },
-  getDocsById(
+  getDocsByIdPaginated(
     state: Partial<ResultPost>,
     payload: QuerySnapshot<DocumentData>
   ): void {
@@ -44,7 +35,7 @@ export const mutations = {
     });
     state.dbDocPaginated = docsIds;
   },
-  selectDocsTest(state: Partial<ResultPost>, payload: any): void {
+  setDocsPagination(state: Partial<ResultPost>, payload: any): void {
     state.docsIdsToLoad = [];
     const lastId = state.lastId || 0;
     const nextLastIndex = payload.limit + payload.firstIndex;
@@ -56,5 +47,31 @@ export const mutations = {
   },
   isLogged(state: Partial<ResultPost>, payload: boolean): void {
     state.isLogged = payload;
+  },
+  getAllDesktop(
+    state: Partial<ResultPost>,
+    payload: QuerySnapshot<DocumentData>
+  ): void {
+    let reults = 0;
+    payload.docs.forEach((element) => {
+      reults = reults + Number(element.data().desktop.roundedValue);
+    });
+    state.resultsAllRoundedDesktop = {
+      value: Number((reults / payload.docs.length).toFixed(2)),
+      totalCount: payload.docs.length,
+    };
+  },
+  getAllMobile(
+    state: Partial<ResultPost>,
+    payload: QuerySnapshot<DocumentData>
+  ): void {
+    let reults = 0;
+    payload.docs.forEach((element) => {
+      reults = reults + Number(element.data().mobile.roundedValue);
+    });
+    state.resultsAllRoundedMobile = {
+      value: Number((reults / payload.docs.length).toFixed(2)),
+      totalCount: payload.docs.length,
+    };
   },
 };

@@ -18,4 +18,31 @@ export const getters = {
   isLogged: (state: Partial<ResultPost>): boolean | undefined => {
     return state.isLogged;
   },
+  getAllUncorrected(state: Partial<ResultPost>): {
+    value: number;
+    totalCount: number;
+  } {
+    state.resultsAllRounded = {
+      value:
+        ((state.resultsAllRoundedDesktop?.value || 0) +
+          (state.resultsAllRoundedMobile?.value || 0)) /
+        2,
+      totalCount:
+        (state.resultsAllRoundedDesktop?.totalCount || 0) +
+        (state.resultsAllRoundedMobile?.totalCount || 0),
+    };
+    return state.resultsAllRounded || { value: 0, totalCount: 0 };
+  },
+  getAllDesktop(state: Partial<ResultPost>): {
+    value: number;
+    totalCount: number;
+  } {
+    return state.resultsAllRoundedDesktop || { value: 0, totalCount: 0 };
+  },
+  getAllMobile(state: Partial<ResultPost>): {
+    value: number;
+    totalCount: number;
+  } {
+    return state.resultsAllRoundedMobile || { value: 0, totalCount: 0 };
+  },
 };

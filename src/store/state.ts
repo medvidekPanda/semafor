@@ -11,4 +11,7 @@ export const state: ResultPost = {
   dbDocPaginated: [],
   lastId: 0,
   isLogged: false,
+  resultsAllRounded: { value: 0, totalCount: 0 },
+  resultsAllRoundedDesktop: { value: 0, totalCount: 0 },
+  resultsAllRoundedMobile: { value: 0, totalCount: 0 },
 };
