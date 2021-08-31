@@ -22,11 +22,12 @@ export const getters = {
     value: number;
     totalCount: number;
   } {
+    const value =
+      ((state.resultsAllRoundedDesktop?.value || 0) +
+        (state.resultsAllRoundedMobile?.value || 0)) /
+      2;
     state.resultsAllRounded = {
-      value:
-        ((state.resultsAllRoundedDesktop?.value || 0) +
-          (state.resultsAllRoundedMobile?.value || 0)) /
-        2,
+      value: Number(value.toFixed(2)),
       totalCount:
         (state.resultsAllRoundedDesktop?.totalCount || 0) +
         (state.resultsAllRoundedMobile?.totalCount || 0),
@@ -44,5 +45,33 @@ export const getters = {
     totalCount: number;
   } {
     return state.resultsAllRoundedMobile || { value: 0, totalCount: 0 };
+  },
+  getAllMediansDesktop(state: Partial<ResultPost>): {
+    value: number;
+    totalCount: number;
+  } {
+    return state.resultsAllMediansRoundedDesktop || { value: 0, totalCount: 0 };
+  },
+  getAllMediansMobile(state: Partial<ResultPost>): {
+    value: number;
+    totalCount: number;
+  } {
+    return state.resultsAllMediansRoundedMobile || { value: 0, totalCount: 0 };
+  },
+  getAllMedians(state: Partial<ResultPost>): {
+    value: number;
+    totalCount: number;
+  } {
+    const value =
+      ((state.resultsAllMediansRoundedDesktop?.value || 0) +
+        (state.resultsAllMediansRoundedMobile?.value || 0)) /
+      2;
+    state.resultsAllMediansRounded = {
+      value: Number(value.toFixed(2)),
+      totalCount:
+        (state.resultsAllMediansRoundedDesktop?.totalCount || 0) +
+        (state.resultsAllMediansRoundedMobile?.totalCount || 0),
+    };
+    return state.resultsAllMediansRounded || { value: 0, totalCount: 0 };
   },
 };

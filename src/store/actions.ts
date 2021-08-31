@@ -1,11 +1,17 @@
 import { ActionContext } from "vuex";
 import firebase from "firebase/app";
-import { WhereFilterOp } from "@firebase/firestore-types";
+import {
+  DocumentData,
+  DocumentSnapshot,
+  WhereFilterOp,
+} from "@firebase/firestore-types";
 import "firebase/firestore";
 import "firebase/auth";
 
 import ResultPost from "../types/results-post.model";
 import { FirebaseDocs } from "@/config/firebase";
+import SemaforRound from "@/types/results-round";
+import GetDocsByIdRequest from "@/types/docs-by-id.request";
 
 export const actions = {
   async saveSemaforResults(
@@ -32,9 +38,7 @@ export const actions = {
     return await db
       .get()
       .then(
-        (
-          result: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
-        ): Promise<string | void> => {
+        (result: DocumentSnapshot<DocumentData>): Promise<string | void> => {
           return new Promise((resolve, reject) => {
             const data = result.data();
 
@@ -71,24 +75,60 @@ export const actions = {
   },
   async getDocsById(
     { state, commit }: ActionContext<ResultPost, ResultPost>,
-    { commitName, query }: any
+    { commitName, query, docId }: GetDocsByIdRequest
   ): Promise<void> {
     const db = firebase.firestore().collection(FirebaseDocs.firebaseDocName);
     const defaultQuerry = {
       whatFind: firebase.firestore.FieldPath.documentId(),
       filterOp: "in",
-      value: state.docsIdsToLoad,
+      value: docId || state.docsIdsToLoad,
     };
-    const finalQuerry = query || defaultQuerry;
-
     db.where(
-      finalQuerry.whatFind,
-      finalQuerry.filterOp as WhereFilterOp,
-      finalQuerry.value
+      query?.whatFind || defaultQuerry.whatFind,
+      (query?.filterOp as WhereFilterOp) ||
+        (defaultQuerry.filterOp as WhereFilterOp),
+      query?.value || defaultQuerry.value
     )
       .get()
       .then((res) => {
         commit(commitName, res);
       });
+  },
+  async addMedian({
+    state,
+  }: ActionContext<ResultPost, ResultPost>): Promise<void> {
+    const db = firebase.firestore().collection(FirebaseDocs.firebaseDocName);
+    state.allDocsResponse?.docs.forEach((doc) => {
+      db.doc(doc.id)
+        .get()
+        .then((res) => {
+          const data = res.data();
+
+          if (data) {
+            let payload = {};
+            const desktopMedian: string = data.desktop?.rounds
+              .map((item: SemaforRound) => String(item.value))
+              .sort()[2];
+
+            const mobileMedian: string = data.mobile?.rounds
+              .map((item: SemaforRound) => String(item.value))
+              .sort()[2];
+
+            if (desktopMedian && !mobileMedian) {
+              payload = { desktop: { median: desktopMedian, ...data.desktop } };
+            } else if (!desktopMedian && mobileMedian) {
+              payload = { mobile: { median: mobileMedian, ...data.mobile } };
+            } else if (desktopMedian && mobileMedian) {
+              payload = {
+                desktop: { median: desktopMedian, ...data.desktop },
+                mobile: { median: mobileMedian, ...data.mobile },
+              };
+            }
+            return new Promise((resolve, reject) => {
+              resolve(db.doc(doc.id).update(payload));
+            });
+          }
+        });
+    });
   },
 };

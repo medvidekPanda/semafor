@@ -1,4 +1,7 @@
-import { QuerySnapshot, DocumentData } from "@firebase/firestore-types";
+import {
+  QuerySnapshot,
+  DocumentData,
+} from "@firebase/firestore-types";
 
 import ResultPost from "../types/results-post.model";
 
@@ -70,6 +73,32 @@ export const mutations = {
       reults = reults + Number(element.data().mobile.roundedValue);
     });
     state.resultsAllRoundedMobile = {
+      value: Number((reults / payload.docs.length).toFixed(2)),
+      totalCount: payload.docs.length,
+    };
+  },
+  getAllMediansDesktop(
+    state: Partial<ResultPost>,
+    payload: QuerySnapshot<DocumentData>
+  ): void {
+    let reults = 0;
+    payload.docs.forEach((element) => {
+      reults = reults + Number(element.data().desktop.median);
+    });
+    state.resultsAllMediansRoundedDesktop = {
+      value: Number((reults / payload.docs.length).toFixed(2)),
+      totalCount: payload.docs.length,
+    };
+  },
+  getAllMediansMobile(
+    state: Partial<ResultPost>,
+    payload: QuerySnapshot<DocumentData>
+  ): void {
+    let reults = 0;
+    payload.docs.forEach((element) => {
+      reults = reults + Number(element.data().mobile.median);
+    });
+    state.resultsAllMediansRoundedMobile = {
       value: Number((reults / payload.docs.length).toFixed(2)),
       totalCount: payload.docs.length,
     };

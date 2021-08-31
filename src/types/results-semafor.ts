@@ -1,7 +1,8 @@
 import SemaforRound from "./results-round";
 
 export interface SemaforResultBase {
-  roundedValue?: number;
+  roundedValue?: string;
+  median?: string;
   rounds?: SemaforRound[];
 }
 export default interface SemaforResult {

@@ -119,24 +119,6 @@ export default defineComponent({
       await this.$store.dispatch("getDocsById", {
         commitName: "getDocsByIdPaginated",
       });
-
-      this.$store.dispatch("getDocsById", {
-        commitName: "getAllDesktop",
-        query: {
-          whatFind: "desktop.roundedValue",
-          filterOp: ">",
-          value: "0",
-        },
-      });
-
-      this.$store.dispatch("getDocsById", {
-        commitName: "getAllMobile",
-        query: {
-          whatFind: "mobile.roundedValue",
-          filterOp: ">",
-          value: "0",
-        },
-      });
     },
     triggerCurrentChange(value: number) {
       this.firstIndex = (value - 1) * limit;

@@ -1,6 +1,9 @@
 <template>
   <div style="overflow-y: auto">
     <template v-if="isLoaded">
+      <el-button type="danger" plain size="medium" @click="triggerSetMedians()"
+        >Vytvoř median</el-button
+      >
       <AdminQuickResults />
     </template>
     <template v-if="isLoaded">
@@ -33,6 +36,11 @@ export default defineComponent({
         this.isLoaded = true;
       });
     }
+  },
+  methods: {
+    triggerSetMedians() {
+      this.$store.dispatch("addMedian");
+    },
   },
 });
 </script>
