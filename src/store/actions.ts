@@ -124,7 +124,18 @@ export const actions = {
                 mobile: { median: mobileMedian, ...data.mobile },
               };
             }
-            return new Promise((resolve, reject) => {
+
+            // new Promise((resolve) => {
+            //   resolve(
+            //     firebase
+            //       .firestore()
+            //       .collection("backup")
+            //       .doc(doc.id)
+            //       .set(data)
+            //   );
+            // });
+
+            new Promise((resolve) => {
               resolve(db.doc(doc.id).update(payload));
             });
           }

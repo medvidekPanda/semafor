@@ -128,8 +128,8 @@ export default defineComponent({
     return {
       redActive: false,
       greenActive: false,
-      minTime: 2000,
-      maxTime: 8000,
+      minTime: 200,
+      maxTime: 800,
       startTime: 0,
       round: 0,
       rounded,
@@ -181,9 +181,11 @@ export default defineComponent({
     onSaveResult() {
       const clickTime = Date.now();
       const result = clickTime - this.startTime;
+      let median: string;
 
       this.results.push({ value: result, round: this.round });
       this.rounded = this.calculateRounded().toFixed(2);
+      median = this.calculateMedian();
       this.greenActive = !this.greenActive;
 
       const payload = {
@@ -191,6 +193,7 @@ export default defineComponent({
           [isMobile ? "mobile" : "desktop"]: {
             rounds: this.results,
             roundedValue: this.rounded,
+            median,
           },
         },
       };
@@ -212,6 +215,10 @@ export default defineComponent({
       }
 
       return number / this.results.length;
+    },
+    calculateMedian(): string {
+      const results = this.results.map(result => result.value).sort();
+      return String(results[2]);
     },
     reloadPage() {
       location.reload();
