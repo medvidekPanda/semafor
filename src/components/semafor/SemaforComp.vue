@@ -128,8 +128,8 @@ export default defineComponent({
     return {
       redActive: false,
       greenActive: false,
-      minTime: 200,
-      maxTime: 800,
+      minTime: 2000,
+      maxTime: 8000,
       startTime: 0,
       round: 0,
       rounded,
