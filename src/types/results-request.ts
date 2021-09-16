@@ -3,7 +3,7 @@ export default interface ResultsRequest {
   email: string;
   inputDevice?: string;
   isMobile?: boolean;
-  sex: string;
+  sex: string | number;
   resultHash: string;
   results?: [];
 }

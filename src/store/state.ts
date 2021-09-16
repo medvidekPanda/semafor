@@ -17,4 +17,5 @@ export const state: ResultPost = {
   resultsAllMediansRounded: { value: 0, totalCount: 0 },
   resultsAllMediansRoundedDesktop: { value: 0, totalCount: 0 },
   resultsAllMediansRoundedMobile: { value: 0, totalCount: 0 },
+  docArray: [],
 };

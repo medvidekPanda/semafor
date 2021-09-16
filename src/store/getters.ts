@@ -74,4 +74,10 @@ export const getters = {
     };
     return state.resultsAllMediansRounded || { value: 0, totalCount: 0 };
   },
+  getAllDocsId(state: Partial<ResultPost>): any {
+    return state.allDocsResponse?.docs;
+  },
+  getDocArray(state: Partial<ResultPost>): DocumentData[] | undefined {
+    return state.docArray;
+  }
 };

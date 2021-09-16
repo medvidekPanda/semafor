@@ -1,7 +1,7 @@
-import {
-  QuerySnapshot,
-  DocumentData,
-} from "@firebase/firestore-types";
+import PostForm from "@/types/post-form";
+import SemaforRound from "@/types/results-round";
+import SemaforResult from "@/types/results-semafor";
+import { QuerySnapshot, DocumentData } from "@firebase/firestore-types";
 
 import ResultPost from "../types/results-post.model";
 
@@ -102,5 +102,76 @@ export const mutations = {
       value: Number((reults / payload.docs.length).toFixed(2)),
       totalCount: payload.docs.length,
     };
+  },
+  getDocById(
+    state: Partial<ResultPost>,
+    payload: QuerySnapshot<DocumentData>
+  ): void {
+    let data = payload.docs[0].data();
+
+    function compareNumbers(a: string, b: string) {
+      return Number(a) - Number(b);
+    }
+    const desktopArray = data.desktop?.rounds
+      ?.map((item: SemaforRound) => String(item.value))
+      .sort(compareNumbers);
+
+    const mobileArray = data.mobile?.rounds
+      ?.map((item: SemaforRound) => String(item.value))
+      .sort(compareNumbers);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const firstDesktop = desktopArray?.shift();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const lastDesktop = desktopArray?.pop();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const firstMobile = mobileArray?.shift();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const lastMobile = mobileArray?.pop();
+
+    let desktopValue = 0;
+    desktopArray?.forEach((value: any) => {
+      desktopValue = desktopValue + Number(value);
+    });
+
+    let mobileValue = 0;
+    mobileArray?.forEach((value: any) => {
+      mobileValue = mobileValue + Number(value);
+    });
+
+    if (desktopValue && !mobileValue) {
+      data = {
+        ...data,
+        desktop: {
+          ...data.desktop,
+          roundedValueCorrected: String((desktopValue / 3).toFixed(2)),
+        },
+      };
+    } else if (!desktopValue && mobileValue) {
+      data = {
+        ...data,
+        mobile: {
+          ...data.mobile,
+          roundedValueCorrected: String((mobileValue / 3).toFixed(2)),
+        },
+      };
+    } else if (desktopValue && mobileValue) {
+      data = {
+        ...data,
+        desktop: {
+          ...data.desktop,
+          roundedValueCorrected: String((desktopValue / 3).toFixed(2)),
+        },
+        mobile: {
+          ...data.mobile,
+          roundedValueCorrected: String((mobileValue / 3).toFixed(2)),
+        },
+      };
+    }
+    data.sex[0] === "male" ? (data.sex = 0) : (data.sex = 1);
+    state.docArray?.push({ data });
+  },
+  clearDocArray(state: Partial<ResultPost>): void {
+    state.docArray = [];
   },
 };

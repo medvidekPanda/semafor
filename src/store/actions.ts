@@ -13,6 +13,10 @@ import { FirebaseDocs } from "@/config/firebase";
 import SemaforRound from "@/types/results-round";
 import GetDocsByIdRequest from "@/types/docs-by-id.request";
 
+function compareNumbers(a: string, b: string) {
+  return Number(a) - Number(b);
+}
+
 export const actions = {
   async saveSemaforResults(
     { commit }: ActionContext<ResultPost, ResultPost>,
@@ -108,11 +112,11 @@ export const actions = {
             let payload = {};
             const desktopMedian: string = data.desktop?.rounds
               .map((item: SemaforRound) => String(item.value))
-              .sort()[2];
+              .sort(compareNumbers)[2];
 
             const mobileMedian: string = data.mobile?.rounds
               .map((item: SemaforRound) => String(item.value))
-              .sort()[2];
+              .sort(compareNumbers)[2];
 
             if (desktopMedian && !mobileMedian) {
               payload = { desktop: { median: desktopMedian, ...data.desktop } };
@@ -124,16 +128,6 @@ export const actions = {
                 mobile: { median: mobileMedian, ...data.mobile },
               };
             }
-
-            // new Promise((resolve) => {
-            //   resolve(
-            //     firebase
-            //       .firestore()
-            //       .collection("backup")
-            //       .doc(doc.id)
-            //       .set(data)
-            //   );
-            // });
 
             new Promise((resolve) => {
               resolve(db.doc(doc.id).update(payload));

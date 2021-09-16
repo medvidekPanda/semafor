@@ -20,4 +20,5 @@ export default interface ResultPost {
   resultsAllMediansRounded: { value: number; totalCount: number };
   resultsAllMediansRoundedDesktop: { value: number; totalCount: number };
   resultsAllMediansRoundedMobile: { value: number; totalCount: number };
+  docArray: DocumentData[],
 }
