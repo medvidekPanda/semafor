@@ -21,4 +21,7 @@ export default interface ResultPost {
   resultsAllMediansRoundedDesktop: { value: number; totalCount: number };
   resultsAllMediansRoundedMobile: { value: number; totalCount: number };
   docArray: DocumentData[],
+  roundedValuesCorrDesktop: number[],
+  roundedValuesCorrMobile: number[],
+  compareMesssage?: string,
 }

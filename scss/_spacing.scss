@@ -19,3 +19,15 @@
     }
   }
 }
+
+.padding {
+  @for $i from 1 through 10 {
+    &-top-#{$i} {
+      padding-top: $i*8px;
+    }
+
+    &-bottom-#{$i} {
+      padding-bottom: $i*8px;
+    }
+  }
+}

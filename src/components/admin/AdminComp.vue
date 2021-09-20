@@ -4,6 +4,13 @@
       <el-button type="danger" plain size="medium" @click="triggerSetMedians()"
         >Vytvoř median</el-button
       >
+      <el-button
+        type="danger"
+        plain
+        size="medium"
+        @click="triggerCorrectedRounded()"
+        >Vytvoř korigovaný průměr</el-button
+      >
       <el-button type="primary" plain size="medium" @click="triggerExportData()"
         >Export</el-button
       >
@@ -45,12 +52,15 @@ export default defineComponent({
     triggerSetMedians() {
       this.$store.dispatch("addMedian");
     },
+    triggerCorrectedRounded() {
+      this.$store.dispatch("addCorrectedRounded");
+    },
     async triggerExportData() {
       this.$store.commit("clearDocArray");
       await this.$store.getters.getAllDocsId.forEach(
         (element: DocumentData) => {
           this.$store.dispatch("getDocsById", {
-            commitName: "getDocById",
+            commitName: "generateExport",
             docId: [element.id],
           });
         }

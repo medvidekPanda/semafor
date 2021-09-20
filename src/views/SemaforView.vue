@@ -3,7 +3,7 @@
     <section class="main-section">
       <SemaforComp />
       <ResultsListComp />
-      <NewResultFormComp class="result-form flex-3" />
+      <!-- <NewResultFormComp class="result-form flex-3" /> -->
     </section>
     <footer class="footer">
       <el-button
@@ -118,7 +118,8 @@ export default defineComponent({
 
   .main-section {
     flex-direction: row;
-    max-width: 1280px;
+    // max-width: 1280px;
+    width: 960px;
     gap: 40px;
   }
 

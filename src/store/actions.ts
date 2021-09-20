@@ -81,6 +81,7 @@ export const actions = {
     { state, commit }: ActionContext<ResultPost, ResultPost>,
     { commitName, query, docId }: GetDocsByIdRequest
   ): Promise<void> {
+    await firebase.auth().signInAnonymously();
     const db = firebase.firestore().collection(FirebaseDocs.firebaseDocName);
     const defaultQuerry = {
       whatFind: firebase.firestore.FieldPath.documentId(),
@@ -133,6 +134,30 @@ export const actions = {
               resolve(db.doc(doc.id).update(payload));
             });
           }
+        });
+    });
+  },
+  async addCorrectedRounded({
+    state,
+    commit,
+  }: ActionContext<ResultPost, ResultPost>): Promise<void> {
+    const db = firebase.firestore().collection(FirebaseDocs.firebaseDocName);
+    state.allDocsResponse?.docs.forEach((doc) => {
+      db.doc(doc.id)
+        .get()
+        .then((res) => {
+          const data = res.data();
+          commit("createCorrectedRound", data);
+
+          const payload = {
+            roundedValuesCorrDesktop: state.roundedValuesCorrDesktop,
+            roundedValuesCorrMobile: state.roundedValuesCorrMobile,
+          };
+
+          console.log("state", db.doc("values-rounded-corrected"));
+          new Promise((resolve) => {
+            resolve(db.doc("values-rounded-corrected").update(payload));
+          });
         });
     });
   },

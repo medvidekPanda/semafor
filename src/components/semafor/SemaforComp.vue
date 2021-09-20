@@ -94,6 +94,7 @@ import ResultPost from "@/types/results-post.model";
 const fill = true;
 const size = 32;
 let rounded: string | undefined = undefined;
+let roundedCorrected: string | undefined = undefined;
 let results: SemaforRound[] = [];
 let isMobile: boolean;
 
@@ -128,17 +129,16 @@ export default defineComponent({
     return {
       redActive: false,
       greenActive: false,
-      minTime: 2000,
-      maxTime: 8000,
+      minTime: 200,
+      maxTime: 800,
       startTime: 0,
       round: 0,
-      rounded,
-      results,
       isStarted: false,
+      isFinished: false,
       fill,
       size,
       aboutTestDialog: false,
-      clicksCount: 10,
+      clicksCount: 100,
       maxCountDialog: false,
       showClose: false,
     };
@@ -147,9 +147,9 @@ export default defineComponent({
     onTestStart() {
       this.isStarted = true;
       this.round = 0;
-      this.results = [];
+      results = [];
       this.$store.dispatch("clearStore");
-      this.clicksCount = 10;
+      this.clicksCount = 100;
       this.startTimer();
     },
     startTimer() {
@@ -183,16 +183,18 @@ export default defineComponent({
       const result = clickTime - this.startTime;
       let median: string;
 
-      this.results.push({ value: result, round: this.round });
-      this.rounded = this.calculateRounded().toFixed(2);
+      results.push({ value: result, round: this.round });
+      rounded = this.calculateRounded().toFixed(2);
+      roundedCorrected = this.calculateRoundedCorrected().toFixed(2);
       median = this.calculateMedian();
       this.greenActive = !this.greenActive;
 
       const payload = {
         results: {
           [isMobile ? "mobile" : "desktop"]: {
-            rounds: this.results,
-            roundedValue: this.rounded,
+            rounds: results,
+            roundedValue: rounded,
+            roundedValueCorrected: roundedCorrected,
             median,
           },
         },
@@ -203,22 +205,46 @@ export default defineComponent({
         this.startTimer();
       } else {
         this.isStarted = false;
+        this.isFinished = true;
         this.$store.dispatch("saveSemaforResults", { isFinished: true });
       }
     },
     calculateRounded() {
       let number = 0;
-      for (const result of this.results) {
+      for (const result of results) {
         if (result.value) {
           number = number + result.value;
         }
       }
 
-      return number / this.results.length;
+      return number / results.length;
+    },
+    calculateRoundedCorrected() {
+      function compareNumbers(a: string, b: string) {
+        return Number(a) - Number(b);
+      }
+
+      const sorted = results
+        .map((item: SemaforRound) => String(item.value))
+        .sort(compareNumbers);
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const first = sorted.shift();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const last = sorted.pop();
+
+      let number = 0;
+      for (const result of sorted) {
+        if (result) {
+          number = number + Number(result);
+        }
+      }
+
+      return number / sorted.length;
     },
     calculateMedian(): string {
-      const results = this.results.map(result => result.value).sort();
-      return String(results[2]);
+      const resultsMap = results.map((result) => result.value).sort();
+      return String(resultsMap[2]);
     },
     reloadPage() {
       location.reload();

@@ -79,5 +79,5 @@ export const getters = {
   },
   getDocArray(state: Partial<ResultPost>): DocumentData[] | undefined {
     return state.docArray;
-  }
+  },
 };

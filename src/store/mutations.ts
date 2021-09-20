@@ -1,6 +1,4 @@
-import PostForm from "@/types/post-form";
 import SemaforRound from "@/types/results-round";
-import SemaforResult from "@/types/results-semafor";
 import { QuerySnapshot, DocumentData } from "@firebase/firestore-types";
 
 import ResultPost from "../types/results-post.model";
@@ -17,6 +15,7 @@ export const mutations = {
     state.id = undefined;
     state.results = undefined;
     state.isFinished = false;
+    state.compareMesssage = undefined;
   },
   getWindowWidth(state: Partial<ResultPost>, payload: number): void {
     state.windowWidth = payload | 0;
@@ -103,7 +102,7 @@ export const mutations = {
       totalCount: payload.docs.length,
     };
   },
-  getDocById(
+  generateExport(
     state: Partial<ResultPost>,
     payload: QuerySnapshot<DocumentData>
   ): void {
@@ -112,11 +111,11 @@ export const mutations = {
     function compareNumbers(a: string, b: string) {
       return Number(a) - Number(b);
     }
-    const desktopArray = data.desktop?.rounds
+    const desktopArray: Array<number> = data.desktop?.rounds
       ?.map((item: SemaforRound) => String(item.value))
       .sort(compareNumbers);
 
-    const mobileArray = data.mobile?.rounds
+    const mobileArray: Array<number> = data.mobile?.rounds
       ?.map((item: SemaforRound) => String(item.value))
       .sort(compareNumbers);
 
@@ -130,12 +129,12 @@ export const mutations = {
     const lastMobile = mobileArray?.pop();
 
     let desktopValue = 0;
-    desktopArray?.forEach((value: any) => {
+    desktopArray?.forEach((value) => {
       desktopValue = desktopValue + Number(value);
     });
 
     let mobileValue = 0;
-    mobileArray?.forEach((value: any) => {
+    mobileArray?.forEach((value) => {
       mobileValue = mobileValue + Number(value);
     });
 
@@ -173,5 +172,81 @@ export const mutations = {
   },
   clearDocArray(state: Partial<ResultPost>): void {
     state.docArray = [];
+  },
+  createCorrectedRound(state: Partial<ResultPost>, data: DocumentData): void {
+    function compareNumbers(a: string, b: string) {
+      return Number(a) - Number(b);
+    }
+
+    const desktopArray = data.desktop?.rounds
+      ?.map((item: SemaforRound) => String(item.value))
+      .sort(compareNumbers);
+
+    const mobileArray = data.mobile?.rounds
+      ?.map((item: SemaforRound) => String(item.value))
+      .sort(compareNumbers);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const firstDesktop = desktopArray?.shift();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const lastDesktop = desktopArray?.pop();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const firstMobile = mobileArray?.shift();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const lastMobile = mobileArray?.pop();
+
+    let desktopValue = 0;
+    desktopArray?.forEach((value: any) => {
+      desktopValue = (desktopValue + Number(value)) / 3;
+    });
+
+    let mobileValue = 0;
+    mobileArray?.forEach((value: any) => {
+      mobileValue = (mobileValue + Number(value)) / 3;
+    });
+
+    if (desktopValue && !mobileValue) {
+      state.roundedValuesCorrDesktop?.push(desktopValue);
+    } else if (!desktopValue && mobileValue) {
+      state.roundedValuesCorrMobile?.push(mobileValue);
+    } else if (desktopValue && mobileValue) {
+      state.roundedValuesCorrDesktop?.push(desktopValue);
+      state.roundedValuesCorrMobile?.push(mobileValue);
+    }
+  },
+  findClosest(state: Partial<ResultPost>, data: DocumentData): void {
+    function compareNumbers(a: number, b: number) {
+      return Number(a) - Number(b);
+    }
+    const sorted = data.docs[0]
+      .data()
+      .roundedValuesCorrDesktop.sort(compareNumbers);
+    const resultToCompare = Number(
+      state.results?.desktop?.roundedValueCorrected
+    );
+    const closestIndex = (num: number, arr: number[]) => {
+      let curr = arr[0],
+        diff = Math.abs(num - curr);
+      let index = 0;
+      for (let val = 0; val < arr.length; val++) {
+        const newdiff = Math.abs(num - arr[val]);
+        if (newdiff < diff) {
+          diff = newdiff;
+          curr = arr[val];
+          index = val;
+        }
+      }
+      return index;
+    };
+    const sortedIndex = closestIndex(resultToCompare, sorted);
+    let compareMessage = undefined;
+    if (sorted[sortedIndex] < resultToCompare) {
+      compareMessage = `Počet lidí, kteří byli lepší než ty: ${
+        sortedIndex + 1
+      } z celkových ${sorted.length}`;
+    } else {
+      compareMessage = `Počet lidí, kteří byli lepší než ty: ${sortedIndex} z celkových ${sorted.length}`;
+    }
+    state.compareMesssage = compareMessage;
   },
 };

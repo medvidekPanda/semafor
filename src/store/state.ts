@@ -18,4 +18,7 @@ export const state: ResultPost = {
   resultsAllMediansRoundedDesktop: { value: 0, totalCount: 0 },
   resultsAllMediansRoundedMobile: { value: 0, totalCount: 0 },
   docArray: [],
+  roundedValuesCorrDesktop: [],
+  roundedValuesCorrMobile: [],
+  compareMesssage: undefined,
 };

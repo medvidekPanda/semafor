@@ -16,6 +16,9 @@
       <h3 class="no-margin">
         Průměrný čas: {{ getResultsStore?.roundedValue }}ms
       </h3>
+      <h3 class="no-margin">
+        Průměrný čas korigovaný: {{ getResultsStore?.roundedValueCorrected }}ms
+      </h3>
       <ul v-if="getResultsStore" class="list">
         <el-space wrap :size="size" direction="vertical" alignment="start">
           <li v-for="result in getResultsStore.rounds" :key="result.value">
@@ -30,8 +33,30 @@
           </li>
         </el-space>
       </ul>
+      <el-space
+        v-if="getCompareMessage"
+        direction="vertical"
+        alignment="start"
+        class="no-margin padding-top-3"
+      >
+        <h4 class="no-margin">{{ getCompareMessage }}</h4>
+        <p class="no-margin padding-top-1">
+          Výsledek je braný z korigovaného průměru, kdy jedna nejnižší a
+          nejvyšší hodnota nejsou započítány do průměru.
+        </p>
+      </el-space>
     </el-space>
     <h4 class="no-margin" v-else>Zatím žádné výsledky</h4>
+    <el-button
+      class="margin-top-1"
+      v-if="getResultsStore?.rounds.length > 4 && !getCompareMessage"
+      v-on:click="compareResults()"
+      type="primary"
+      plain
+      :loading="!getCompareMessage && clicked"
+      style="width: 100%"
+      >Porovnat Výsledky</el-button
+    >
   </div>
 </template>
 
@@ -54,6 +79,7 @@ export default defineComponent({
   data() {
     return {
       size: 8,
+      clicked: false,
     };
   },
   computed: {
@@ -63,6 +89,22 @@ export default defineComponent({
     },
     windowWidth(): Store<ResultPost> {
       return this.$store.state.windowWidth;
+    },
+    getCompareMessage(): Store<ResultPost> {
+      return this.$store.state.compareMesssage;
+    },
+  },
+  methods: {
+    compareResults() {
+      this.clicked = true;
+      this.$store.dispatch("getDocsById", {
+        commitName: "findClosest",
+        docId: ["values-rounded-corrected"],
+      });
+
+      setTimeout(() => {
+        this.clicked = false;
+      }, 3000);
     },
   },
 });
