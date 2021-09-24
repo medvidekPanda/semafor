@@ -97,6 +97,7 @@ let rounded: string | undefined = undefined;
 let roundedCorrected: string | undefined = undefined;
 let results: SemaforRound[] = [];
 let isMobile: boolean;
+let clicksCount: number;
 
 export default defineComponent({
   name: "SemaforComp",
@@ -129,8 +130,8 @@ export default defineComponent({
     return {
       redActive: false,
       greenActive: false,
-      minTime: 200,
-      maxTime: 800,
+      minTime: 2000,
+      maxTime: 8000,
       startTime: 0,
       round: 0,
       isStarted: false,
@@ -138,7 +139,7 @@ export default defineComponent({
       fill,
       size,
       aboutTestDialog: false,
-      clicksCount: 100,
+      clicksCount,
       maxCountDialog: false,
       showClose: false,
     };
@@ -149,7 +150,7 @@ export default defineComponent({
       this.round = 0;
       results = [];
       this.$store.dispatch("clearStore");
-      this.clicksCount = 100;
+      this.clicksCount = 10;
       this.startTimer();
     },
     startTimer() {

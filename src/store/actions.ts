@@ -154,7 +154,8 @@ export const actions = {
             roundedValuesCorrMobile: state.roundedValuesCorrMobile,
           };
 
-          console.log("state", db.doc("values-rounded-corrected"));
+          console.log('payload', payload);
+
           new Promise((resolve) => {
             resolve(db.doc("values-rounded-corrected").update(payload));
           });

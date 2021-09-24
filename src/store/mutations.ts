@@ -197,32 +197,36 @@ export const mutations = {
 
     let desktopValue = 0;
     desktopArray?.forEach((value: any) => {
-      desktopValue = (desktopValue + Number(value)) / 3;
+      desktopValue = desktopValue + Number(value);
     });
 
     let mobileValue = 0;
     mobileArray?.forEach((value: any) => {
-      mobileValue = (mobileValue + Number(value)) / 3;
+      mobileValue = mobileValue + Number(value);
     });
 
     if (desktopValue && !mobileValue) {
-      state.roundedValuesCorrDesktop?.push(desktopValue);
+      state.roundedValuesCorrDesktop?.push(desktopValue / 3);
     } else if (!desktopValue && mobileValue) {
-      state.roundedValuesCorrMobile?.push(mobileValue);
+      state.roundedValuesCorrMobile?.push(mobileValue / 3);
     } else if (desktopValue && mobileValue) {
-      state.roundedValuesCorrDesktop?.push(desktopValue);
-      state.roundedValuesCorrMobile?.push(mobileValue);
+      state.roundedValuesCorrDesktop?.push(desktopValue / 3);
+      state.roundedValuesCorrMobile?.push(mobileValue / 3);
     }
   },
   findClosest(state: Partial<ResultPost>, data: DocumentData): void {
+    console.log("state", state.isMobile);
     function compareNumbers(a: number, b: number) {
       return Number(a) - Number(b);
     }
-    const sorted = data.docs[0]
-      .data()
-      .roundedValuesCorrDesktop.sort(compareNumbers);
+    const key = state.isMobile
+      ? "roundedValuesCorrMobile"
+      : "roundedValuesCorrDesktop";
+    const key2 = state.isMobile ? "mobile" : "desktop";
+
+    const sorted = data.docs[0].data()[key].sort(compareNumbers);
     const resultToCompare = Number(
-      state.results?.desktop?.roundedValueCorrected
+      state.results && state.results[key2]?.roundedValueCorrected
     );
     const closestIndex = (num: number, arr: number[]) => {
       let curr = arr[0],
