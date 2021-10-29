@@ -1,4 +1,4 @@
-import SemaforRound from "./results-round";
+import { SemaforRound } from "./results-round";
 
 export interface SemaforResultBase {
   roundedValue?: string;

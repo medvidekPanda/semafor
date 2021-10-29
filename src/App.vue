@@ -47,15 +47,6 @@ export default defineComponent({
       environment: "",
     };
   },
-  async mounted() {
-    await Device.getInfo().then((info) => {
-      isMobile =
-        info.operatingSystem === "ios" || info.operatingSystem === "android";
-    });
-    this.$store.dispatch("isMobile", isMobile);
-    this.environment = process.env.NODE_ENV.substring(0, 3);
-    document.title = process.env.VUE_APP_TITLE;
-  },
   methods: {
     goToAdmin() {
       router.push("admin");
@@ -68,6 +59,15 @@ export default defineComponent({
       this.$store.commit("isLogged", false);
       router.push("/login");
     },
+  },
+  async mounted() {
+    await Device.getInfo().then((info) => {
+      isMobile =
+        info.operatingSystem === "ios" || info.operatingSystem === "android";
+    });
+    this.$store.dispatch("isMobile", isMobile);
+    this.environment = process.env.NODE_ENV.substring(0, 3);
+    document.title = process.env.VUE_APP_TITLE;
   },
 });
 </script>

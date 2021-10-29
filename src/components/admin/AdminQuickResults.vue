@@ -34,16 +34,33 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "AdminQuickResults",
+  computed: {
+    allDesktop(): ValueTotalCount {
+      return this.$store.getters.getAllDesktop;
+    },
+    getAllUncorrected(): ValueTotalCount {
+      return this.$store.getters.getAllUncorrected;
+    },
+    totalCount(): number {
+      return this.$store.getters.numberOfDocs;
+    },
+    allMobile(): ValueTotalCount {
+      return this.$store.getters.getAllMobile;
+    },
+    getAllMediansDesktop(): ValueTotalCount {
+      return this.$store.getters.getAllMediansDesktop;
+    },
+    getAllMediansMobile(): ValueTotalCount {
+      return this.$store.getters.getAllMediansMobile;
+    },
+    getAllMedians(): ValueTotalCount {
+      return this.$store.getters.getAllMedians;
+    },
+  },
   data() {
     return {
       isLoaded: false,
     };
-  },
-  async mounted() {
-    const isLogged = this.$store.getters.isLogged;
-    if (isLogged) {
-      this.loadResults();
-    }
   },
   methods: {
     async loadResults() {
@@ -84,31 +101,11 @@ export default defineComponent({
       });
     },
   },
-  computed: {
-    allDesktop(): ValueTotalCount {
-      return this.$store.getters.getAllDesktop;
-    },
-    getAllUncorrected(): ValueTotalCount {
-      return this.$store.getters.getAllUncorrected;
-    },
-    totalCount(): number {
-      return this.$store.getters.numberOfDocs;
-    },
-    allMobile(): ValueTotalCount {
-      return this.$store.getters.getAllMobile;
-    },
-    getAllMediansDesktop(): ValueTotalCount {
-      return this.$store.getters.getAllMediansDesktop;
-    },
-    getAllMediansMobile(): ValueTotalCount {
-      return this.$store.getters.getAllMediansMobile;
-    },
-    getAllMedians(): ValueTotalCount {
-      return this.$store.getters.getAllMedians;
-    },
+  async mounted() {
+    const isLogged = this.$store.getters.isLogged;
+    if (isLogged) {
+      this.loadResults();
+    }
   },
 });
 </script>
-
-<style scoped lang="scss">
-</style>

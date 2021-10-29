@@ -66,12 +66,6 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "ResultsListComp",
-  data() {
-    return {
-      size: 8,
-      clicked: false,
-    };
-  },
   computed: {
     getCompareMessage(): string {
       return this.$store.getters.getCompareMessage;
@@ -86,6 +80,12 @@ export default defineComponent({
     windowWidth(): number {
       return this.$store.getters.windowWidth;
     },
+  },
+  data() {
+    return {
+      size: 8,
+      clicked: false,
+    };
   },
   methods: {
     compareResults() {

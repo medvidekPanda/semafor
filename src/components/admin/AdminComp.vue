@@ -40,14 +40,6 @@ export default defineComponent({
       isLoaded: false,
     };
   },
-  async mounted() {
-    const isLogged = this.$store.getters.isLogged;
-    if (isLogged) {
-      await this.$store.dispatch("getAllDocs").then(() => {
-        this.isLoaded = true;
-      });
-    }
-  },
   methods: {
     triggerSetMedians() {
       this.$store.dispatch("addMedian");
@@ -81,8 +73,13 @@ export default defineComponent({
       }, 1000);
     },
   },
+  async mounted() {
+    const isLogged = this.$store.getters.isLogged;
+    if (isLogged) {
+      await this.$store.dispatch("getAllDocs").then(() => {
+        this.isLoaded = true;
+      });
+    }
+  },
 });
 </script>
-
-<style scoped lang="scss">
-</style>

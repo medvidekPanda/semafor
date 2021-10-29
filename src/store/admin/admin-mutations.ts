@@ -1,5 +1,6 @@
 import { FirebaseDocs } from "@/config/firebase";
 import { compareNumbers } from "@/helpers/compare-numbers";
+import { mapSortValues, removeFirstLastValue, summarizeValues } from "@/helpers/map-sort-values";
 import { SemaforRound } from "@/types/results/results-round";
 import { AdminModel } from "@/types/state/admin-model";
 import { StateModel } from "@/types/state/state-model";
@@ -49,44 +50,18 @@ export const adminMutations = {
     });
   },
   createCorrectedRound(state: Partial<AdminModel>, data: DocumentData): void {
-    function compareNumbers(a: string, b: string) {
-      return Number(a) - Number(b);
-    }
-
-    const desktopArray = data.desktop?.rounds
-      ?.map((item: SemaforRound) => String(item.value))
-      .sort(compareNumbers);
-
-    const mobileArray = data.mobile?.rounds
-      ?.map((item: SemaforRound) => String(item.value))
-      .sort(compareNumbers);
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const firstDesktop = desktopArray?.shift();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const lastDesktop = desktopArray?.pop();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const firstMobile = mobileArray?.shift();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const lastMobile = mobileArray?.pop();
-
-    let desktopValue = 0;
-    desktopArray?.forEach((value: any) => {
-      desktopValue = desktopValue + Number(value);
-    });
-
-    let mobileValue = 0;
-    mobileArray?.forEach((value: any) => {
-      mobileValue = mobileValue + Number(value);
-    });
+    const desktopArray = removeFirstLastValue(mapSortValues(data, "desktop"));
+    const mobileArray =   removeFirstLastValue(mapSortValues(data, "mobile"));
+    const desktopValue = summarizeValues(desktopArray);
+    const mobileValue = summarizeValues(mobileArray);
 
     if (desktopValue && !mobileValue) {
-      state.roundedValuesCorrDesktop?.push(desktopValue / 3);
+      state.roundedValuesCorrDesktop?.push(desktopValue);
     } else if (!desktopValue && mobileValue) {
-      state.roundedValuesCorrMobile?.push(mobileValue / 3);
+      state.roundedValuesCorrMobile?.push(mobileValue);
     } else if (desktopValue && mobileValue) {
-      state.roundedValuesCorrDesktop?.push(desktopValue / 3);
-      state.roundedValuesCorrMobile?.push(mobileValue / 3);
+      state.roundedValuesCorrDesktop?.push(desktopValue);
+      state.roundedValuesCorrMobile?.push(mobileValue);
     }
   },
   generateExport(
@@ -95,9 +70,6 @@ export const adminMutations = {
   ): void {
     let data = payload.docs[0].data();
 
-    function compareNumbers(a: string, b: string) {
-      return Number(a) - Number(b);
-    }
     const desktopArray: Array<number> = data.desktop?.rounds
       ?.map((item: SemaforRound) => String(item.value))
       .sort(compareNumbers);
@@ -226,7 +198,10 @@ export const adminMutations = {
     });
     state.dbDocPaginated = docsIds;
   },
-  setDocsPagination(state: Partial<AdminModel>, payload: any): void {
+  setDocsPagination(
+    state: Partial<AdminModel>,
+    payload: { firstIndex: number; limit: number }
+  ): void {
     state.docsIdsToLoad = [];
     const lastId = state.lastId || 0;
     const nextLastIndex = payload.limit + payload.firstIndex;

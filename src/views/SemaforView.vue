@@ -36,6 +36,9 @@ import SemaforComp from "@/components/semafor/SemaforComp.vue";
 
 export default defineComponent({
   name: "Semafor",
+  beforeUnmount() {
+    window.removeEventListener("resize", this.onResize);
+  },
   components: {
     NewResultFormComp,
     SemaforComp,
@@ -55,19 +58,16 @@ export default defineComponent({
       fill: true,
     };
   },
-  mounted() {
-    this.onResize();
-    this.$nextTick(() => {
-      window.addEventListener("resize", this.onResize);
-    });
-  },
   methods: {
     onResize() {
       this.$store.dispatch("getWindowWidth", window.innerWidth);
     },
   },
-  beforeUnmount() {
-    window.removeEventListener("resize", this.onResize);
+  mounted() {
+    this.onResize();
+    this.$nextTick(() => {
+      window.addEventListener("resize", this.onResize);
+    });
   },
 });
 </script>

@@ -12,6 +12,12 @@ import router from "../../router";
 
 export default defineComponent({
   name: "Admin",
+  components: {
+    AdminComp,
+  },
+  data() {
+    return {};
+  },
   setup() {
     onMounted(() => {
       const user = firebase.auth().currentUser;
@@ -20,13 +26,6 @@ export default defineComponent({
         router.replace("/login");
       }
     });
-  },
-  components: {
-    AdminComp
-  },
-  methods: {},
-  data() {
-    return {};
   },
 });
 </script>
