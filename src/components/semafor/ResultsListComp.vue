@@ -62,20 +62,12 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Device } from "@capacitor/device";
 import { Store } from "vuex";
 
-import ResultPost from "@/types/results-post.model";
-
-let isMobile: boolean;
+import { StateModel } from "@/types/state-model";
 
 export default defineComponent({
   name: "ResultsListComp",
-  async mounted() {
-    const info = await Device.getInfo();
-    isMobile =
-      info.operatingSystem === "ios" || info.operatingSystem === "android";
-  },
   data() {
     return {
       size: 8,
@@ -83,15 +75,20 @@ export default defineComponent({
     };
   },
   computed: {
-    getResultsStore(): Store<ResultPost> {
-      const store = this.$store.state.results;
-      return store && store[isMobile ? "mobile" : "desktop"];
+    getResultsStore(): Store<StateModel> {
+      const store = this.$store.getters.getResults;
+      console.log("ismobile2", this.isMobile);
+      return store && store[this.isMobile ? "mobile" : "desktop"];
     },
-    windowWidth(): Store<ResultPost> {
-      return this.$store.state.windowWidth;
+    windowWidth(): Store<StateModel> {
+      return this.$store.getters.windowWidth;
     },
-    getCompareMessage(): Store<ResultPost> {
-      return this.$store.state.compareMesssage;
+    getCompareMessage(): Store<StateModel> {
+      return this.$store.state.resultModule.compareMesssage;
+    },
+    isMobile() {
+      const isMobile = this.$store.getters.isMobile;
+      return isMobile;
     },
   },
   methods: {

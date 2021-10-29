@@ -86,7 +86,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { Store } from "vuex";
-import { Device } from "@capacitor/device";
 
 import SemaforRound from "../../types/results-round";
 import ResultPost from "@/types/results-post.model";
@@ -96,42 +95,25 @@ const size = 32;
 let rounded: string | undefined = undefined;
 let roundedCorrected: string | undefined = undefined;
 let results: SemaforRound[] = [];
-let isMobile: boolean;
 let clicksCount: number;
 
 export default defineComponent({
   name: "SemaforComp",
-  async mounted() {
-    const info = await Device.getInfo();
-    isMobile =
-      info.operatingSystem === "ios" || info.operatingSystem === "android";
-    this.$store.dispatch("saveSemaforResults", { isMobile });
-    window.addEventListener("keydown", (e) => {
-      if (e.code === "Space") {
-        this.checkCounts();
-      }
-
-      if (
-        e.code === "Space" &&
-        this.round > 0 &&
-        this.round < 6 &&
-        this.greenActive
-      ) {
-        this.onSaveResult();
-      }
-    });
-  },
   computed: {
     windowWidth(): Store<ResultPost> {
       return this.$store.state.windowWidth;
+    },
+    isMobile() {
+      const isMobile = this.$store.getters.isMobile;
+      return isMobile;
     },
   },
   data() {
     return {
       redActive: false,
       greenActive: false,
-      minTime: 2000,
-      maxTime: 8000,
+      minTime: 200,
+      maxTime: 800,
       startTime: 0,
       round: 0,
       isStarted: false,
@@ -189,10 +171,9 @@ export default defineComponent({
       roundedCorrected = this.calculateRoundedCorrected().toFixed(2);
       median = this.calculateMedian();
       this.greenActive = !this.greenActive;
-
       const payload = {
         results: {
-          [isMobile ? "mobile" : "desktop"]: {
+          [this.isMobile ? "mobile" : "desktop"]: {
             rounds: results,
             roundedValue: rounded,
             roundedValueCorrected: roundedCorrected,
@@ -251,6 +232,22 @@ export default defineComponent({
       location.reload();
       return false;
     },
+  },
+  mounted() {
+    window.addEventListener("keydown", (e) => {
+      if (e.code === "Space") {
+        this.checkCounts();
+      }
+
+      if (
+        e.code === "Space" &&
+        this.round > 0 &&
+        this.round < 6 &&
+        this.greenActive
+      ) {
+        this.onSaveResult();
+      }
+    });
   },
 });
 </script>

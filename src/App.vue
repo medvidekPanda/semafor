@@ -30,8 +30,11 @@
 import { defineComponent } from "vue";
 import firebase from "firebase/app";
 import "firebase/auth";
+import { Device } from "@capacitor/device";
 
 import router from "./router";
+
+let isMobile: boolean | undefined;
 
 export default defineComponent({
   computed: {
@@ -44,7 +47,12 @@ export default defineComponent({
       environment: "",
     };
   },
-  mounted() {
+  async mounted() {
+    await Device.getInfo().then((info) => {
+      isMobile =
+        info.operatingSystem === "ios" || info.operatingSystem === "android";
+    });
+    this.$store.dispatch("isMobile", isMobile);
     this.environment = process.env.NODE_ENV.substring(0, 3);
     document.title = process.env.VUE_APP_TITLE;
   },

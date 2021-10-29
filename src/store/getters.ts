@@ -1,6 +1,5 @@
-import { DocumentData } from "@firebase/firestore-types";
-
 import ResultPost from "@/types/results-post.model";
+import { DocumentData } from "@firebase/firestore-types";
 
 export const getters = {
   numberOfDocs: (state: Partial<ResultPost>): number => {
@@ -14,9 +13,6 @@ export const getters = {
   },
   lastDbIndex: (state: Partial<ResultPost>): number => {
     return state.lastId || 0;
-  },
-  isLogged: (state: Partial<ResultPost>): boolean | undefined => {
-    return state.isLogged;
   },
   getAllUncorrected(state: Partial<ResultPost>): {
     value: number;
@@ -79,5 +75,11 @@ export const getters = {
   },
   getDocArray(state: Partial<ResultPost>): DocumentData[] | undefined {
     return state.docArray;
+  },
+  getResults(state: Partial<ResultPost>): any {
+    return state.results;
+  },
+  isMobile: ({ isMobile }: Partial<ResultPost>): boolean | undefined => {
+    return isMobile;
   },
 };

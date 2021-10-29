@@ -46,7 +46,6 @@ export default defineComponent({
         .auth()
         .signInWithEmailAndPassword(formData.email, formData.password)
         .then(() => {
-          console.log("Přihlášení úspěšné");
           this.$store.commit("isLogged", true);
           router.replace("/admin");
         })
@@ -69,7 +68,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-</style>

@@ -1,15 +1,10 @@
 import SemaforRound from "@/types/results-round";
-import { QuerySnapshot, DocumentData } from "@firebase/firestore-types";
-
+import { DocumentData, QuerySnapshot } from "@firebase/firestore-types";
 import ResultPost from "../types/results-post.model";
 
 export const mutations = {
-  saveSemaforResults(state: ResultPost, payload: Partial<ResultPost>): void {
-    const results = { ...state.results, ...payload.results };
-    state.id = payload.id;
-    state.results = results;
-    state.isFinished = payload.isFinished || state.isFinished;
-    state.isMobile = payload.isMobile || state.isMobile;
+  clearDocArray(state: Partial<ResultPost>): void {
+    state.docArray = [];
   },
   clearStore(state: ResultPost): void {
     state.id = undefined;
@@ -17,38 +12,46 @@ export const mutations = {
     state.isFinished = false;
     state.compareMesssage = undefined;
   },
-  getWindowWidth(state: Partial<ResultPost>, payload: number): void {
-    state.windowWidth = payload | 0;
-  },
-  getAllDocs(
-    state: Partial<ResultPost>,
-    payload: QuerySnapshot<DocumentData>
-  ): void {
-    state.allDocsResponse = payload;
-    state.lastId = state.allDocsResponse.docs.length - 1 || 0;
-  },
-  getDocsByIdPaginated(
-    state: Partial<ResultPost>,
-    payload: QuerySnapshot<DocumentData>
-  ): void {
-    const docsIds: DocumentData = [];
-    payload.docs.forEach((doc) => {
-      docsIds.push(doc.data());
-    });
-    state.dbDocPaginated = docsIds;
-  },
-  setDocsPagination(state: Partial<ResultPost>, payload: any): void {
-    state.docsIdsToLoad = [];
-    const lastId = state.lastId || 0;
-    const nextLastIndex = payload.limit + payload.firstIndex;
-    const limit = lastId < nextLastIndex ? lastId + 1 : nextLastIndex;
-
-    for (let i = payload.firstIndex; i < limit; i++) {
-      state.docsIdsToLoad.push(state.allDocsResponse?.docs[i]?.id || "");
+  createCorrectedRound(state: Partial<ResultPost>, data: DocumentData): void {
+    function compareNumbers(a: string, b: string) {
+      return Number(a) - Number(b);
     }
-  },
-  isLogged(state: Partial<ResultPost>, payload: boolean): void {
-    state.isLogged = payload;
+
+    const desktopArray = data.desktop?.rounds
+      ?.map((item: SemaforRound) => String(item.value))
+      .sort(compareNumbers);
+
+    const mobileArray = data.mobile?.rounds
+      ?.map((item: SemaforRound) => String(item.value))
+      .sort(compareNumbers);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const firstDesktop = desktopArray?.shift();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const lastDesktop = desktopArray?.pop();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const firstMobile = mobileArray?.shift();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const lastMobile = mobileArray?.pop();
+
+    let desktopValue = 0;
+    desktopArray?.forEach((value: any) => {
+      desktopValue = desktopValue + Number(value);
+    });
+
+    let mobileValue = 0;
+    mobileArray?.forEach((value: any) => {
+      mobileValue = mobileValue + Number(value);
+    });
+
+    if (desktopValue && !mobileValue) {
+      state.roundedValuesCorrDesktop?.push(desktopValue / 3);
+    } else if (!desktopValue && mobileValue) {
+      state.roundedValuesCorrMobile?.push(mobileValue / 3);
+    } else if (desktopValue && mobileValue) {
+      state.roundedValuesCorrDesktop?.push(desktopValue / 3);
+      state.roundedValuesCorrMobile?.push(mobileValue / 3);
+    }
   },
   getAllDesktop(
     state: Partial<ResultPost>,
@@ -63,18 +66,12 @@ export const mutations = {
       totalCount: payload.docs.length,
     };
   },
-  getAllMobile(
+  getAllDocs(
     state: Partial<ResultPost>,
     payload: QuerySnapshot<DocumentData>
   ): void {
-    let reults = 0;
-    payload.docs.forEach((element) => {
-      reults = reults + Number(element.data().mobile.roundedValue);
-    });
-    state.resultsAllRoundedMobile = {
-      value: Number((reults / payload.docs.length).toFixed(2)),
-      totalCount: payload.docs.length,
-    };
+    state.allDocsResponse = payload;
+    state.lastId = state.allDocsResponse.docs.length - 1 || 0;
   },
   getAllMediansDesktop(
     state: Partial<ResultPost>,
@@ -101,6 +98,29 @@ export const mutations = {
       value: Number((reults / payload.docs.length).toFixed(2)),
       totalCount: payload.docs.length,
     };
+  },
+  getAllMobile(
+    state: Partial<ResultPost>,
+    payload: QuerySnapshot<DocumentData>
+  ): void {
+    let reults = 0;
+    payload.docs.forEach((element) => {
+      reults = reults + Number(element.data().mobile.roundedValue);
+    });
+    state.resultsAllRoundedMobile = {
+      value: Number((reults / payload.docs.length).toFixed(2)),
+      totalCount: payload.docs.length,
+    };
+  },
+  getDocsByIdPaginated(
+    state: Partial<ResultPost>,
+    payload: QuerySnapshot<DocumentData>
+  ): void {
+    const docsIds: DocumentData = [];
+    payload.docs.forEach((doc) => {
+      docsIds.push(doc.data());
+    });
+    state.dbDocPaginated = docsIds;
   },
   generateExport(
     state: Partial<ResultPost>,
@@ -170,52 +190,8 @@ export const mutations = {
     data.sex[0] === "male" ? (data.sex = 0) : (data.sex = 1);
     state.docArray?.push({ data });
   },
-  clearDocArray(state: Partial<ResultPost>): void {
-    state.docArray = [];
-  },
-  createCorrectedRound(state: Partial<ResultPost>, data: DocumentData): void {
-    function compareNumbers(a: string, b: string) {
-      return Number(a) - Number(b);
-    }
-
-    const desktopArray = data.desktop?.rounds
-      ?.map((item: SemaforRound) => String(item.value))
-      .sort(compareNumbers);
-
-    const mobileArray = data.mobile?.rounds
-      ?.map((item: SemaforRound) => String(item.value))
-      .sort(compareNumbers);
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const firstDesktop = desktopArray?.shift();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const lastDesktop = desktopArray?.pop();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const firstMobile = mobileArray?.shift();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const lastMobile = mobileArray?.pop();
-
-    let desktopValue = 0;
-    desktopArray?.forEach((value: any) => {
-      desktopValue = desktopValue + Number(value);
-    });
-
-    let mobileValue = 0;
-    mobileArray?.forEach((value: any) => {
-      mobileValue = mobileValue + Number(value);
-    });
-
-    if (desktopValue && !mobileValue) {
-      state.roundedValuesCorrDesktop?.push(desktopValue / 3);
-    } else if (!desktopValue && mobileValue) {
-      state.roundedValuesCorrMobile?.push(mobileValue / 3);
-    } else if (desktopValue && mobileValue) {
-      state.roundedValuesCorrDesktop?.push(desktopValue / 3);
-      state.roundedValuesCorrMobile?.push(mobileValue / 3);
-    }
-  },
-  findClosest(state: Partial<ResultPost>, data: DocumentData): void {
-    console.log("state", state.isMobile);
+  findClosest(state: any, data: DocumentData): void {
+    console.log("state", state);
     function compareNumbers(a: number, b: number) {
       return Number(a) - Number(b);
     }
@@ -252,5 +228,26 @@ export const mutations = {
       compareMessage = `Počet lidí, kteří byli lepší než ty: ${sortedIndex} z celkových ${sorted.length}`;
     }
     state.compareMesssage = compareMessage;
+  },
+  isMobile(state: Partial<any>, payload: boolean): void {
+    state.isMobile = payload;
+  },
+  saveSemaforResults(state: any, payload: any): void {
+    console.log('save', state, payload)
+    const results = { ...state.results, ...payload.results };
+    state.id = payload.id;
+    state.results = results;
+    state.isFinished = payload.isFinished || state.isFinished;
+    state.isMobile = payload.isMobile || state.isMobile;
+  },
+  setDocsPagination(state: Partial<ResultPost>, payload: any): void {
+    state.docsIdsToLoad = [];
+    const lastId = state.lastId || 0;
+    const nextLastIndex = payload.limit + payload.firstIndex;
+    const limit = lastId < nextLastIndex ? lastId + 1 : nextLastIndex;
+
+    for (let i = payload.firstIndex; i < limit; i++) {
+      state.docsIdsToLoad.push(state.allDocsResponse?.docs[i]?.id || "");
+    }
   },
 };

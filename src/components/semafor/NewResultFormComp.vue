@@ -1,5 +1,10 @@
 <template>
-  <el-space :size="size" direction="vertical" alignment="start" class="overflow-y">
+  <el-space
+    :size="size"
+    direction="vertical"
+    alignment="start"
+    class="overflow-y"
+  >
     <el-form
       ref="formData"
       :model="formData"
@@ -49,7 +54,10 @@
       Vyplněním a odeslání formuláře dáváte souhlas se zpracováním
       demografických údajů (věk a pohlaví) k výzkumným účelům. Formulář nesbírá
       osobní údaje. Vyplnění křestního jména a e-mailu slouží pouze pro
-      hashovací funkci <el-link href="https://www.digitalnipevnost.cz/viki/hash" target="_blank">(více zde)</el-link>
+      hashovací funkci
+      <el-link href="https://www.digitalnipevnost.cz/viki/hash" target="_blank"
+        >(více zde)</el-link
+      >
       a vytvoření identifikačního kódu v databázi. Účelem vytvoření tohoto kódu
       je zabránit duplikaci odeslaných odpovědí. Celý test je tak anonymní.
     </p>
@@ -66,8 +74,7 @@ import "firebase/auth";
 import ResultsForm from "../../types/results-form";
 import PostForm from "../../types/post-form";
 import { Store } from "vuex";
-import ResultPost from "@/types/results-post.model";
-import { Device } from "@capacitor/device";
+import { StateModel } from "@/types/state-model";
 
 let formData: ResultsForm = {
   age: 6,
@@ -76,16 +83,19 @@ let formData: ResultsForm = {
   sex: "",
 };
 
-let isMobile: boolean;
-
 export default defineComponent({
   name: "NewResultFormComp",
   computed: {
-    isButtonDisabled(): Store<ResultPost> {
-      const store = this.$store.state.results;
+    isButtonDisabled(): Store<StateModel> {
+      console.log("ismobile1", this.isMobile);
+      const store = this.$store.getters.getResults;
       return (
-        store && store[isMobile ? "mobile" : "desktop"]?.rounds?.length === 5
+        store && store[this.isMobile ? "mobile" : "desktop"]?.rounds?.length === 5
       );
+    },
+    isMobile() {
+      const isMobile = this.$store.getters.isMobile;
+      return isMobile;
     },
   },
   data() {
@@ -108,11 +118,6 @@ export default defineComponent({
       ],
       size: 24,
     };
-  },
-  async mounted() {
-    const info = await Device.getInfo();
-    isMobile =
-      info.operatingSystem === "ios" || info.operatingSystem === "android";
   },
   methods: {
     onSubmitForm() {
