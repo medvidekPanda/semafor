@@ -101,7 +101,7 @@ export default defineComponent({
   name: "SemaforComp",
   computed: {
     windowWidth(): Store<ResultPost> {
-      return this.$store.state.windowWidth;
+      return this.$store.getters.windowWidth;
     },
     isMobile() {
       const isMobile = this.$store.getters.isMobile;

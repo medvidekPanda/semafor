@@ -46,7 +46,7 @@ export default defineComponent({
       return this.$store.state.isFinished;
     },
     windowWidth(): Store<ResultPost> {
-      return this.$store.state.windowWidth;
+      return this.$store.getters.windowWidth;
     },
   },
   data() {
