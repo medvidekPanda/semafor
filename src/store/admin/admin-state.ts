@@ -1,20 +1,11 @@
-export const state = {
-  id: undefined,
-  isFinished: false,
-  isMobile: undefined,
-  results: undefined,
-  allDocsResponse: undefined,
-  docsIdsToLoad: [],
-  dbDocPaginated: [],
-  lastId: 0,
+
+export const adminState = {
   resultsAllRounded: { value: 0, totalCount: 0 },
   resultsAllRoundedDesktop: { value: 0, totalCount: 0 },
   resultsAllRoundedMobile: { value: 0, totalCount: 0 },
   resultsAllMediansRounded: { value: 0, totalCount: 0 },
   resultsAllMediansRoundedDesktop: { value: 0, totalCount: 0 },
   resultsAllMediansRoundedMobile: { value: 0, totalCount: 0 },
-  docArray: [],
   roundedValuesCorrDesktop: [],
   roundedValuesCorrMobile: [],
-  compareMesssage: undefined,
-};
+}

@@ -61,10 +61,8 @@
 </template>
 
 <script lang="ts">
+import SemaforResult from "@/types/results-semafor";
 import { defineComponent } from "vue";
-import { Store } from "vuex";
-
-import { StateModel } from "@/types/state-model";
 
 export default defineComponent({
   name: "ResultsListComp",
@@ -75,20 +73,18 @@ export default defineComponent({
     };
   },
   computed: {
-    getResultsStore(): Store<StateModel> {
+    getCompareMessage(): string {
+      return this.$store.getters.getCompareMessage;
+    },
+    getResultsStore(): SemaforResult {
       const store = this.$store.getters.getResults;
-      console.log("ismobile2", this.isMobile);
       return store && store[this.isMobile ? "mobile" : "desktop"];
     },
-    windowWidth(): Store<StateModel> {
+    isMobile(): boolean {
+      return this.$store.getters.isMobile;
+    },
+    windowWidth(): number {
       return this.$store.getters.windowWidth;
-    },
-    getCompareMessage(): Store<StateModel> {
-      return this.$store.state.resultModule.compareMesssage;
-    },
-    isMobile() {
-      const isMobile = this.$store.getters.isMobile;
-      return isMobile;
     },
   },
   methods: {

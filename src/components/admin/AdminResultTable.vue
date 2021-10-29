@@ -1,6 +1,6 @@
 <template>
   <el-table
-    v-if="finalDocs.length > 0"
+    v-if="finalDocs?.length"
     :data="finalDocs"
     :row-class-name="tableRowClassName"
   >
@@ -76,6 +76,7 @@
     </el-table-column>
   </el-table>
   <el-pagination
+    v-if="finalDocs?.length"
     layout="prev, pager, next"
     :total="lastIndex + 1"
     @current-change="triggerCurrentChange($event)"
@@ -86,29 +87,23 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { DocumentData } from "@firebase/firestore-types";
+import { TableRow } from "@/types/table-row";
 
 const limit = 10;
 
 export default defineComponent({
   name: "AdminResultsTable",
+  computed: {
+    finalDocs(): DocumentData {
+      return this.$store.getters.dbDocPaginated;
+    },
+  },
   data() {
     return {
       firstIndex: 0,
       lastIndex: 0,
       limit,
     };
-  },
-  async mounted() {
-    const isLogged = this.$store.getters.isLogged;
-    if (isLogged) {
-      this.lastIndex = this.$store.getters.lastDbIndex;
-      this.loadResults();
-    }
-  },
-  computed: {
-    finalDocs(): DocumentData {
-      return this.$store.getters.dbDocPaginated;
-    },
   },
   methods: {
     async loadResults() {
@@ -127,12 +122,19 @@ export default defineComponent({
     indexMethod(index: number) {
       return index + this.firstIndex + 1;
     },
-    tableRowClassName({ row }: any) {
+    tableRowClassName({ row }: TableRow) {
       if (row?.desktop?.roundedValue) {
         return "desktop";
       }
       return "";
     },
+  },
+  async mounted() {
+    const isLogged = this.$store.getters.isLogged;
+    if (isLogged) {
+      this.lastIndex = this.$store.getters.lastDbIndex;
+      this.loadResults();
+    }
   },
 });
 </script>

@@ -87,7 +87,6 @@ export default defineComponent({
   name: "NewResultFormComp",
   computed: {
     isButtonDisabled(): Store<StateModel> {
-      console.log("ismobile1", this.isMobile);
       const store = this.$store.getters.getResults;
       return (
         store && store[this.isMobile ? "mobile" : "desktop"]?.rounds?.length === 5

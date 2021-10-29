@@ -1,20 +1,17 @@
-import ResultPost from "@/types/results-post.model";
+import { AdminModel } from "@/types/admin-model";
 import { DocumentData } from "@firebase/firestore-types";
 
-export const getters = {
-  numberOfDocs: (state: Partial<ResultPost>): number => {
-    return state.allDocsResponse?.docs.length || 0;
-  },
-  docsIdsToLoad: (state: Partial<ResultPost>): string[] | undefined => {
-    return state.docsIdsToLoad;
-  },
-  dbDocPaginated: (state: Partial<ResultPost>): DocumentData | undefined => {
+export const adminGetters = {
+  dbDocPaginated: (state: Partial<AdminModel>): DocumentData | undefined => {
     return state.dbDocPaginated;
   },
-  lastDbIndex: (state: Partial<ResultPost>): number => {
-    return state.lastId || 0;
+  docsIdsToLoad: (state: Partial<AdminModel>): string[] | undefined => {
+    return state.docsIdsToLoad;
   },
-  getAllUncorrected(state: Partial<ResultPost>): {
+  getAllDocsId(state: Partial<AdminModel>): any {
+    return state.allDocsResponse?.docs;
+  },
+  getAllUncorrected(state: Partial<AdminModel>): {
     value: number;
     totalCount: number;
   } {
@@ -30,31 +27,31 @@ export const getters = {
     };
     return state.resultsAllRounded || { value: 0, totalCount: 0 };
   },
-  getAllDesktop(state: Partial<ResultPost>): {
+  getAllDesktop(state: Partial<AdminModel>): {
     value: number;
     totalCount: number;
   } {
     return state.resultsAllRoundedDesktop || { value: 0, totalCount: 0 };
   },
-  getAllMobile(state: Partial<ResultPost>): {
+  getAllMobile(state: Partial<AdminModel>): {
     value: number;
     totalCount: number;
   } {
     return state.resultsAllRoundedMobile || { value: 0, totalCount: 0 };
   },
-  getAllMediansDesktop(state: Partial<ResultPost>): {
+  getAllMediansDesktop(state: Partial<AdminModel>): {
     value: number;
     totalCount: number;
   } {
     return state.resultsAllMediansRoundedDesktop || { value: 0, totalCount: 0 };
   },
-  getAllMediansMobile(state: Partial<ResultPost>): {
+  getAllMediansMobile(state: Partial<AdminModel>): {
     value: number;
     totalCount: number;
   } {
     return state.resultsAllMediansRoundedMobile || { value: 0, totalCount: 0 };
   },
-  getAllMedians(state: Partial<ResultPost>): {
+  getAllMedians(state: Partial<AdminModel>): {
     value: number;
     totalCount: number;
   } {
@@ -70,16 +67,10 @@ export const getters = {
     };
     return state.resultsAllMediansRounded || { value: 0, totalCount: 0 };
   },
-  getAllDocsId(state: Partial<ResultPost>): any {
-    return state.allDocsResponse?.docs;
+  lastDbIndex: (state: Partial<AdminModel>): number => {
+    return state.lastId || 0;
   },
-  getDocArray(state: Partial<ResultPost>): DocumentData[] | undefined {
-    return state.docArray;
-  },
-  getResults(state: Partial<ResultPost>): any {
-    return state.results;
-  },
-  isMobile: ({ isMobile }: Partial<ResultPost>): boolean | undefined => {
-    return isMobile;
+  numberOfDocs: (state: Partial<AdminModel>): number => {
+    return state.allDocsResponse?.docs.length || 0;
   },
 };
