@@ -1,4 +1,4 @@
-import { CommonModuleModel } from "@/types/common-model";
+import { CommonModuleModel } from "@/types/state/common-model";
 
 export const mutationsCommon = {
   getWindowWidth(state: Partial<CommonModuleModel>, payload: number): void {

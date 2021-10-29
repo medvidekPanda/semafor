@@ -87,8 +87,8 @@
 import { defineComponent } from "vue";
 import { Store } from "vuex";
 
-import SemaforRound from "../../types/results-round";
-import ResultPost from "@/types/results-post.model";
+import { SemaforRound } from "../../types/results/results-round";
+import { ResultPost } from "@/types/state/results-post.model";
 
 const fill = true;
 const size = 32;

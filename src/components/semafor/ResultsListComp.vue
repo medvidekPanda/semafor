@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import SemaforResult from "@/types/results-semafor";
+import SemaforResult from "@/types/results/results-semafor";
 import { defineComponent } from "vue";
 
 export default defineComponent({

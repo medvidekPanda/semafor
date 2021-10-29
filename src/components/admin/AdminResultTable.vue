@@ -87,7 +87,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { DocumentData } from "@firebase/firestore-types";
-import { TableRow } from "@/types/table-row";
+import { TableRow } from "@/types/tables/table-row";
 
 const limit = 10;
 

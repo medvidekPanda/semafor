@@ -1,17 +1,17 @@
 import { DocumentData } from "@firebase/firestore-types";
-import ResultPost from "../../types/results-post.model";
+import { ResultPost } from "../../types/state/results-post.model";
 
 export const resultsMutations = {
   clearDocArray(state: Partial<ResultPost>): void {
     state.docArray = [];
   },
-  clearStore(state: ResultPost): void {
+  clearStore(state: Partial<ResultPost>): void {
     state.id = undefined;
     state.results = undefined;
     state.isFinished = false;
     state.compareMesssage = undefined;
   },
-  findClosest(state: any, data: DocumentData): void {
+  findClosest(state: ResultPost, data: DocumentData): void {
     console.log("state", state);
     function compareNumbers(a: number, b: number) {
       return Number(a) - Number(b);
@@ -50,10 +50,11 @@ export const resultsMutations = {
     }
     state.compareMesssage = compareMessage;
   },
-  isMobile(state: Partial<any>, payload: boolean): void {
+  isMobile(state: Partial<ResultPost>, payload: boolean): void {
     state.isMobile = payload;
   },
-  saveSemaforResults(state: any, payload: any): void {
+  saveSemaforResults(state: ResultPost, payload: Partial<ResultPost>): void {
+    console.log("payload", payload);
     const results = { ...state.results, ...payload.results };
     state.id = payload.id;
     state.results = results;

@@ -1,5 +1,7 @@
-import { AdminModel } from "@/types/admin-model";
-import { DocumentData } from "@firebase/firestore-types";
+import { defaultResultValue } from "@/constants/default-result-value";
+import { AdminModel } from "@/types/state/admin-model";
+import { DocumentData, QueryDocumentSnapshot } from "@firebase/firestore-types";
+import { ValueTotalCount } from "../results/value-totalCount";
 
 export const adminGetters = {
   dbDocPaginated: (state: Partial<AdminModel>): DocumentData | undefined => {
@@ -8,13 +10,12 @@ export const adminGetters = {
   docsIdsToLoad: (state: Partial<AdminModel>): string[] | undefined => {
     return state.docsIdsToLoad;
   },
-  getAllDocsId(state: Partial<AdminModel>): any {
+  getAllDocsId(
+    state: Partial<AdminModel>
+  ): QueryDocumentSnapshot<DocumentData>[] | undefined {
     return state.allDocsResponse?.docs;
   },
-  getAllUncorrected(state: Partial<AdminModel>): {
-    value: number;
-    totalCount: number;
-  } {
+  getAllUncorrected(state: Partial<AdminModel>): ValueTotalCount {
     const value =
       ((state.resultsAllRoundedDesktop?.value || 0) +
         (state.resultsAllRoundedMobile?.value || 0)) /
@@ -25,36 +26,21 @@ export const adminGetters = {
         (state.resultsAllRoundedDesktop?.totalCount || 0) +
         (state.resultsAllRoundedMobile?.totalCount || 0),
     };
-    return state.resultsAllRounded || { value: 0, totalCount: 0 };
+    return state.resultsAllRounded || defaultResultValue;
   },
-  getAllDesktop(state: Partial<AdminModel>): {
-    value: number;
-    totalCount: number;
-  } {
-    return state.resultsAllRoundedDesktop || { value: 0, totalCount: 0 };
+  getAllDesktop(state: Partial<AdminModel>): ValueTotalCount {
+    return state.resultsAllRoundedDesktop || defaultResultValue;
   },
-  getAllMobile(state: Partial<AdminModel>): {
-    value: number;
-    totalCount: number;
-  } {
-    return state.resultsAllRoundedMobile || { value: 0, totalCount: 0 };
+  getAllMobile(state: Partial<AdminModel>): ValueTotalCount {
+    return state.resultsAllRoundedMobile || defaultResultValue;
   },
-  getAllMediansDesktop(state: Partial<AdminModel>): {
-    value: number;
-    totalCount: number;
-  } {
-    return state.resultsAllMediansRoundedDesktop || { value: 0, totalCount: 0 };
+  getAllMediansDesktop(state: Partial<AdminModel>): ValueTotalCount {
+    return state.resultsAllMediansRoundedDesktop || defaultResultValue;
   },
-  getAllMediansMobile(state: Partial<AdminModel>): {
-    value: number;
-    totalCount: number;
-  } {
-    return state.resultsAllMediansRoundedMobile || { value: 0, totalCount: 0 };
+  getAllMediansMobile(state: Partial<AdminModel>): ValueTotalCount {
+    return state.resultsAllMediansRoundedMobile || defaultResultValue;
   },
-  getAllMedians(state: Partial<AdminModel>): {
-    value: number;
-    totalCount: number;
-  } {
+  getAllMedians(state: Partial<AdminModel>): ValueTotalCount {
     const value =
       ((state.resultsAllMediansRoundedDesktop?.value || 0) +
         (state.resultsAllMediansRoundedMobile?.value || 0)) /
@@ -65,7 +51,7 @@ export const adminGetters = {
         (state.resultsAllMediansRoundedDesktop?.totalCount || 0) +
         (state.resultsAllMediansRoundedMobile?.totalCount || 0),
     };
-    return state.resultsAllMediansRounded || { value: 0, totalCount: 0 };
+    return state.resultsAllMediansRounded || defaultResultValue;
   },
   lastDbIndex: (state: Partial<AdminModel>): number => {
     return state.lastId || 0;

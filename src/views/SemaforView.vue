@@ -30,7 +30,7 @@ import { defineComponent } from "vue";
 import { Store } from "vuex";
 
 import NewResultFormComp from "@/components/semafor/NewResultFormComp.vue";
-import ResultPost from "@/types/results-post.model";
+import { ResultPost } from "@/types/state/results-post.model";
 import ResultsListComp from "@/components/semafor/ResultsListComp.vue";
 import SemaforComp from "@/components/semafor/SemaforComp.vue";
 

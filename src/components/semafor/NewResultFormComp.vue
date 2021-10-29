@@ -71,10 +71,10 @@ import MD5 from "crypto-js/md5";
 import firebase from "firebase/app";
 import "firebase/auth";
 
-import ResultsForm from "../../types/results-form";
-import PostForm from "../../types/post-form";
+import ResultsForm from "../../types/results/results-form";
+import PostForm from "../../types/results/post-form";
 import { Store } from "vuex";
-import { StateModel } from "@/types/state-model";
+import { StateModel } from "@/types/state/state-model";
 
 let formData: ResultsForm = {
   age: 6,

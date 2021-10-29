@@ -29,6 +29,7 @@
 </template>
 
 <script lang="ts">
+import { ValueTotalCount } from "@/store/results/value-totalCount";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -84,25 +85,25 @@ export default defineComponent({
     },
   },
   computed: {
-    allDesktop(): { value: number; totalCount: number } {
+    allDesktop(): ValueTotalCount {
       return this.$store.getters.getAllDesktop;
     },
-    getAllUncorrected(): { value: number; totalCount: number } {
+    getAllUncorrected(): ValueTotalCount {
       return this.$store.getters.getAllUncorrected;
     },
     totalCount(): number {
       return this.$store.getters.numberOfDocs;
     },
-    allMobile(): { value: number; totalCount: number } {
+    allMobile(): ValueTotalCount {
       return this.$store.getters.getAllMobile;
     },
-    getAllMediansDesktop(): { value: number; totalCount: number } {
+    getAllMediansDesktop(): ValueTotalCount {
       return this.$store.getters.getAllMediansDesktop;
     },
-    getAllMediansMobile(): { value: number; totalCount: number } {
+    getAllMediansMobile(): ValueTotalCount {
       return this.$store.getters.getAllMediansMobile;
     },
-    getAllMedians(): { value: number; totalCount: number } {
+    getAllMedians(): ValueTotalCount {
       return this.$store.getters.getAllMedians;
     },
   },

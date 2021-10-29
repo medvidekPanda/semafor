@@ -1,4 +1,4 @@
-import { StateModel } from "@/types/state-model";
+import { StateModel } from "@/types/state/state-model";
 import { InjectionKey } from "vue";
 import { createStore, Store, useStore as baseUseStore } from "vuex";
 import { adminActions } from "./admin/admin-actions";

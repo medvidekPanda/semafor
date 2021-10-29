@@ -1,14 +1,11 @@
 import { FirebaseDocs } from "@/config/firebase";
-import { StateModel } from "@/types/state-model";
-import {
-  DocumentData,
-  DocumentSnapshot
-} from "@firebase/firestore-types";
+import { StateModel } from "@/types/state/state-model";
+import { DocumentData, DocumentSnapshot } from "@firebase/firestore-types";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { ActionContext } from "vuex";
-import ResultPost from "../../types/results-post.model";
+import { ResultPost } from "../../types/state/results-post.model";
 
 export const resultsActions = {
   clearStore({ commit }: ActionContext<ResultPost, StateModel>): void {

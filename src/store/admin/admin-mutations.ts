@@ -1,8 +1,8 @@
 import { FirebaseDocs } from "@/config/firebase";
 import { compareNumbers } from "@/helpers/compare-numbers";
-import { AdminModel } from "@/types/admin-model";
-import SemaforRound from "@/types/results-round";
-import { StateModel } from "@/types/state-model";
+import { SemaforRound } from "@/types/results/results-round";
+import { AdminModel } from "@/types/state/admin-model";
+import { StateModel } from "@/types/state/state-model";
 import { DocumentData, QuerySnapshot } from "@firebase/firestore-types";
 import firebase from "firebase/app";
 import "firebase/auth";

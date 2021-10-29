@@ -1,5 +1,5 @@
-import ResultPost from "@/types/results-post.model";
-import SemaforResult from "@/types/results-semafor";
+import SemaforResult from "@/types/results/results-semafor";
+import { ResultPost } from "@/types/state/results-post.model";
 import { DocumentData } from "@firebase/firestore-types";
 
 export const resultsGetters = {

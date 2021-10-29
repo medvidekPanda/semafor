@@ -1,5 +1,5 @@
-import { CommonModuleModel } from "@/types/common-model";
-import { StateModel } from "@/types/state-model";
+import { CommonModuleModel } from "@/types/state/common-model";
+import { StateModel } from "@/types/state/state-model";
 import { ActionContext } from "vuex";
 
 export const actionsCommon = {

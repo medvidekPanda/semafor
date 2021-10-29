@@ -1,7 +1,7 @@
 import { FirebaseDocs } from "@/config/firebase";
-import { AdminModel } from "@/types/admin-model";
 import GetDocsByIdRequest from "@/types/docs-by-id.request";
-import { StateModel } from "@/types/state-model";
+import { AdminModel } from "@/types/state/admin-model";
+import { StateModel } from "@/types/state/state-model";
 import { WhereFilterOp } from "@firebase/firestore-types";
 import firebase from "firebase/app";
 import "firebase/auth";

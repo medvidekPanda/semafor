@@ -1,4 +1,4 @@
-export default interface SemaforRound {
+export interface SemaforRound {
   value: number;
   round: number | string;
 }
