@@ -12,7 +12,7 @@ export const resultsActions = {
     commit("clearStore");
   },
   async isMobile(
-    { commit }: ActionContext<any, StateModel>,
+    { commit }: ActionContext<ResultPost, StateModel>,
     payload: Partial<ResultPost>
   ): Promise<void> {
     commit("isMobile", payload);

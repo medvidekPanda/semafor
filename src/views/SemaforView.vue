@@ -3,9 +3,9 @@
     <section class="main-section">
       <SemaforComp />
       <ResultsListComp />
-      <!-- <NewResultFormComp class="result-form flex-3" /> -->
+      <NewResultFormComp class="result-form flex-3" />
     </section>
-    <!-- <footer class="footer">
+    <footer class="footer">
       <el-button
         type="primary"
         @click="submitFormDialog = true"
@@ -13,7 +13,7 @@
       >
         Odeslat výsledky
       </el-button>
-    </footer> -->
+    </footer>
 
     <el-dialog
       title="Odeslat výsledky"

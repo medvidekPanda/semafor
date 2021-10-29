@@ -1,5 +1,7 @@
 import { FirebaseDocs } from "@/config/firebase";
+import { compareNumbers } from "@/helpers/compare-numbers";
 import GetDocsByIdRequest from "@/types/docs-by-id.request";
+import { SemaforRound } from "@/types/results/results-round";
 import { AdminModel } from "@/types/state/admin-model";
 import { StateModel } from "@/types/state/state-model";
 import { WhereFilterOp } from "@firebase/firestore-types";
@@ -30,7 +32,47 @@ export const adminActions = {
         });
     });
   },
-  async getAllDocs({ commit }: ActionContext<AdminModel, StateModel>): Promise<void> {
+  async addMedian({
+    state,
+  }: ActionContext<AdminModel, StateModel>): Promise<void> {
+    const db = firebase.firestore().collection(FirebaseDocs.firebaseDocName);
+    state.allDocsResponse?.docs.forEach((doc) => {
+      db.doc(doc.id)
+        .get()
+        .then((res) => {
+          const data = res.data();
+
+          if (data) {
+            let payload = {};
+            const desktopMedian: string = data.desktop?.rounds
+              .map((item: SemaforRound) => String(item.value))
+              .sort(compareNumbers)[2];
+
+            const mobileMedian: string = data.mobile?.rounds
+              .map((item: SemaforRound) => String(item.value))
+              .sort(compareNumbers)[2];
+
+            if (desktopMedian && !mobileMedian) {
+              payload = { desktop: { median: desktopMedian, ...data.desktop } };
+            } else if (!desktopMedian && mobileMedian) {
+              payload = { mobile: { median: mobileMedian, ...data.mobile } };
+            } else if (desktopMedian && mobileMedian) {
+              payload = {
+                desktop: { median: desktopMedian, ...data.desktop },
+                mobile: { median: mobileMedian, ...data.mobile },
+              };
+            }
+
+            new Promise((resolve) => {
+              resolve(db.doc(doc.id).update(payload));
+            });
+          }
+        });
+    });
+  },
+  async getAllDocs({
+    commit,
+  }: ActionContext<AdminModel, StateModel>): Promise<void> {
     const db = firebase.firestore().collection(FirebaseDocs.firebaseDocName);
     await db.get().then((res) => {
       commit("getAllDocs", res);

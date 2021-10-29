@@ -95,6 +95,7 @@ export default defineComponent({
   name: "AdminResultsTable",
   computed: {
     finalDocs(): DocumentData {
+      console.log(this.$store.getters.dbDocPaginated);
       return this.$store.getters.dbDocPaginated;
     },
   },
